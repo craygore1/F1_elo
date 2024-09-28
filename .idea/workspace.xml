@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="edd09b10-d746-40bc-907d-70361df92786" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/racemodule.py" beforeDir="false" afterPath="$PROJECT_DIR$/racemodule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/elohistory.py" beforeDir="false" afterPath="$PROJECT_DIR$/elohistory.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,6 +15,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2mg3J0cRW7FN5LzivUGQ40kcYyA" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -59,6 +66,18 @@
       <option name="presentableId" value="Default" />
       <updated>1727484316296</updated>
     </task>
+    <task id="LOCAL-00001" summary="Clean up race module">
+      <created>1727484786332</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1727484786332</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Clean up race module" />
+    <option name="LAST_COMMIT_MESSAGE" value="Clean up race module" />
   </component>
 </project>

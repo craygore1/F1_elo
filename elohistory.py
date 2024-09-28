@@ -14,3 +14,5 @@ for row in All_Drivers.itertuples():
     temp = glicko2.Player()
     driver = row.id
     Driver_Glicko[driver] = temp
+
+Driver_Ratings = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
