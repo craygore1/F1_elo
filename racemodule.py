@@ -55,9 +55,4 @@ def extract_race(year, racenumber, df):
         race_results = race_results.drop(driver_dnfs.index)
     return race_results, driver_dnfs
     
-# Example usage
-results = ["john", "bob", "matt", 'cheryl']
-head_to_head = race_to_head_to_head(results)
 
-for participant, vector in head_to_head.items():
-    print(f"{participant}: {vector}")
