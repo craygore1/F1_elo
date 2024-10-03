@@ -29,8 +29,8 @@ class Player:
     # Class attribute
     # The system constant, which constrains
     # the change in volatility over time.
-    _tau = 0.5
-
+    _tau = 0.6
+    
     def getRating(self):
         return (self.__rating * 173.7178) + 1500 
 
