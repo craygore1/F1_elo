@@ -25,7 +25,7 @@ Rating_History[0] = Current_Rating['Rating']
 
 update_dict = {}
 
-for i in range(1, max(All_Races['raceId']) + 1):
+for i in range(1, max(All_Races['raceId'])+1):
     updated_ratings, single_race, test, h2h = racemodule.run_race(i,Current_Rating, Driver_Glicko, All_Races)
     Current_Rating['Rating'] = updated_ratings['Rating']
     Current_Rating['RD'] = updated_ratings['RD']

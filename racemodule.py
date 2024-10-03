@@ -113,8 +113,9 @@ def run_race(racenumber, ratings, glicko, df):
         ratings.loc[ratings['id'] == driver, 'RD'] = glicko[driver].getRd()
     
     New_Rating = pd.DataFrame(New_Rating)
+    extracted_col = Race_Result['driverId']
     updated_ratings = ratings
-    race_result = New_Rating
+    race_result = New_Rating.assign(LocationSpecificColumn=pd.Series(extracted_col).values)
         
     return updated_ratings, race_result, Race_Ratings, h2h
     
