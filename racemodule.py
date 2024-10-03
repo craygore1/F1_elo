@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
-import glicko2
 
 def race_to_h2h(results, teams):
     """
-    Converts a race result list into head-to-head vectors.
+    Converts a race result list into head-to-head vectors (omits teammates).
     
     Parameters:
         results: A list that represents a single race's finish order. 
@@ -42,6 +40,33 @@ def race_to_h2h(results, teams):
 
     return head_to_head_vectors, all_opponents
 
+def race_to_h2h_team(results):
+    """
+    Converts a race result list into head-to-head vectors (omits teammates).
+    
+    Parameters:
+        results: A list that represents a single race's finish order. 
+                                 E.g., ["john", "matt", "bob"]
+        teams: A corresponding list of teams for each of the drivers also in finishing order.
+    
+    Returns:
+        dict: A dictionary where the key is the participant and the value is the head-to-head vector.
+    """
+    # Step 1: Gather all unique participants
+    participant_idx = {participant: idx for idx, participant in enumerate(results)}
+
+    # Step 2: Create a dictionary to store head-to-head vectors
+    head_to_head_vectors = {participant: [0] * (len(results) - 1) for participant in results}
+    
+    
+    # Step 3: Update head-to-head vectors based on person results
+    for i, driver in enumerate(participant_idx):
+        current_participant = driver
+        for j in range(i, len(results)-1):
+            head_to_head_vectors[current_participant][j] = 1
+
+    return head_to_head_vectors
+
 def extract_race(racenumber, df):
     '''
     Parameters
@@ -75,14 +100,14 @@ def run_race(racenumber, ratings, glicko, df):
     Parameters
     ----------
     racenumber : Race number in f1 history (from raceID column)
-    ratings : Current ratings and RD of all drivers
+    ratingss : Current ratingss and RD of all drivers
     glicko : glicko class instances for all drivers
     df : dataframe of all races
 
     Returns
     -------
-    updated_ratings : updated dataframe of ratings and rd for all drivers
-    race_result : new ratings for only the drivers in the race
+    updated_ratingss : updated dataframe of ratingss and rd for all drivers
+    race_result : new ratingss for only the drivers in the race
 
     '''
     Race_Result, Dnfs = extract_race(racenumber ,df)
@@ -117,7 +142,33 @@ def run_race(racenumber, ratings, glicko, df):
     updated_ratings = ratings
     race_result = New_Rating.assign(LocationSpecificColumn=pd.Series(extracted_col).values)
         
-    return updated_ratings, race_result, Race_Ratings, h2h
-    
-    
+    return updated_ratings, race_result
 
+def run_race_team(racenumber, ratings, glicko, df):
+    race, dnf = extract_race(racenumber, df)
+    
+    teamdict = {k: v for k, v in race.groupby("constructorId")}
+    teamdict = {key: df for key, df in teamdict.items() if df.shape[0] > 1}
+    
+    h2h_dict = {}
+    New_Rating = []
+    for team in teamdict.keys():
+        h2h = race_to_h2h_team(teamdict[team]['driverId'])
+        h2h_dict[team] = h2h
+    
+    for team in teamdict.keys():
+        for i, driver in enumerate(h2h_dict[team]):
+            Race_Ratings = ratings[ratings['id'].isin(teamdict[team]['driverId'])]
+            Race_Ratings = Race_Ratings[Race_Ratings['id'].isin([driver]) == False]
+    
+            glicko[driver].update_player(Race_Ratings['Rating'], 
+                                                Race_Ratings['RD'], h2h_dict[team][driver])
+             
+            New_Rating.append(glicko[driver].getRating())
+             
+            ratings.loc[ratings['id'] == driver, 'Rating'] = glicko[driver].getRating()
+            ratings.loc[ratings['id'] == driver, 'RD'] = glicko[driver].getRd()
+
+    updated_ratings = ratings
+         
+    return updated_ratings
