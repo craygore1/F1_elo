@@ -172,3 +172,24 @@ def run_race_team(racenumber, ratings, glicko, df):
     updated_ratings = ratings
          
     return updated_ratings
+
+def results_without_teammates(df):
+    """
+    Given a dataframe of race results, returns a dictionary where each key is a driver's name
+    and the value is a dataframe of race results with only their teammates removed.
+    """
+    # Create a dictionary to store the results for each driver
+    results_dict = {}
+
+    # Iterate over unique drivers
+    for driver in df['driverId'].unique():
+        # Get the team of the current driver
+        driver_team = df.loc[df['driverId'] == driver, 'constructorId'].iloc[0]
+
+        # Filter out only the teammates (same team but different driver)
+        filtered_results = df[~((df['constructorId'] == driver_team) & (df['driverId'] != driver))]
+
+        # Store the filtered results in the dictionary
+        results_dict[driver] = filtered_results
+
+    return results_dict

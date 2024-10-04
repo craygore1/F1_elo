@@ -1,78 +1,34 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import pandas as pd
-import glicko2
 import racemodule
 from multielo import MultiElo, Player, Tracker
-
 
 All_Races = pd.read_csv('f1db-races-race-results.csv')
 All_Drivers = pd.read_csv('f1db-drivers.csv')
 
-Driver_Glicko = {driver: idx for idx, driver in enumerate(All_Drivers.id)}
-Driver_Glicko_Team = {driver: idx for idx, driver in enumerate(All_Drivers.id)}
+unique_combinations = All_Races[['year', 'round']].drop_duplicates().sort_values(['year', 'round']).reset_index(drop=True)
 
-for row in All_Drivers.itertuples():
-    temp = glicko2.Player()
-    driver = row.id
-    Driver_Glicko[driver] = temp
-    Driver_Glicko_Team[driver] = temp
+# Step 2: Create a sequence of unique dates starting from an arbitrary date (e.g., "2000-01-01")
+unique_combinations['date'] = pd.date_range(start='2000-01-01', periods=len(unique_combinations), freq='D')
 
-# Initializing rating
-Current_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Current_Rating['Rating'] = 1500
-Current_Rating['RD'] = 350
-
-Rating_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Rating_History[0] = Current_Rating['Rating']
-
-update_dict = {}
-    
-# Initializing team rating
-Current_Rating_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Current_Rating_Team['Rating'] = 1500
-Current_Rating_Team['RD'] = 350
-
-Blended_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Blended_Rating['Rating'] = 0.14*Current_Rating['Rating'] + 0.86*Current_Rating_Team['Rating']
-Blended_Rating['RD'] = 0.14*Current_Rating['RD'] + 0.86*Current_Rating_Team['RD']
-
-Rating_History_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Rating_History_Team[0] = Current_Rating['Rating']
-
-update_dict_team = {}
-
+resultsdict = {}
 for i in range(1, max(All_Races['raceId'])+1):
-    updated_ratings, single_race = racemodule.run_race(i,Blended_Rating, Driver_Glicko, All_Races)
-    Current_Rating['Rating'] = updated_ratings['Rating']
-    Current_Rating['RD'] = updated_ratings['RD']
-    update_dict[i] = Current_Rating['Rating']
+    race, dnf = racemodule.extract_race(i, All_Races)
+    resultsdict[i] = pd.Series(race['driverId'].tolist())
+    temp = set(resultsdict[i])
+    resultsdict[i] = list(resultsdict[i])
     
-    team_ratings = racemodule.run_race_team(i,Blended_Rating, Driver_Glicko_Team, All_Races)
-    Current_Rating_Team['Rating'] = team_ratings['Rating']
-    Current_Rating_Team['RD'] = team_ratings['RD']
-    update_dict_team[i] = Current_Rating_Team['Rating']
-    
-    Blended_Rating['Rating'] = 0.14*Current_Rating['Rating'] + 0.86*Current_Rating_Team['Rating']
-    Blended_Rating['RD'] = 0.14*Current_Rating['RD'] + 0.86*Current_Rating_Team['RD']
+results = pd.DataFrame().from_dict(resultsdict, orient='index')
+results = results.reset_index(drop=True)
+results.insert(0, 'date', unique_combinations['date'])
 
+tracker = Tracker()
+tracker.process_data(results)
 
-Rating_History = pd.concat([Rating_History, pd.DataFrame(update_dict, index=Current_Rating.index)], axis=1)
-numeric_RH = Rating_History.select_dtypes(include='number')
-string_RH = Rating_History.iloc[:, :2]
+ratings = tracker.get_current_ratings()
+history = tracker.get_history_df()
+historygroup = history.groupby('player_id')['rating'].max()
 
-Career_High = string_RH.copy()
-Career_High['Max'] = numeric_RH.max(axis=1)
-
-Rating_History_Team = pd.concat([Rating_History_Team, pd.DataFrame(update_dict_team, index=Current_Rating_Team.index)], axis=1)
-numeric_RH_Team = Rating_History_Team.select_dtypes(include='number')
-string_RH_Team = Rating_History_Team.iloc[:, :2]
-
-Career_High_Team = string_RH_Team.copy()
-Career_High_Team['Max'] = numeric_RH_Team.max(axis=1)   
-
-
-
-    
-
+testrace, testdnf = racemodule.extract_race(3, All_Races)
+test = racemodule.results_without_teammates(testrace)
