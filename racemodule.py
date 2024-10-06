@@ -116,8 +116,6 @@ def run_race(racenumber, ratings, glicko, df):
     New_Rating = []
 
     for i, driver in enumerate(Race_Result['driverId']):
-        #sequence = [x for x in range(len(Race_Ratings['id'])) if x != i]
-        
         Race_Ratings = ratings[ratings['id'].isin(opponents[driver])]
         temp = Race_Result[Race_Result['driverId'].isin(opponents[driver])]
         Race_Ratings = Race_Ratings.merge(temp, left_on='id', right_on = 'driverId')
@@ -193,3 +191,79 @@ def results_without_teammates(df):
         results_dict[driver] = filtered_results
 
     return results_dict
+
+def elo_race(racenumber, ratings, elo, df):
+    race, dnf = extract_race(racenumber, df)
+    temp = results_without_teammates(race)
+    
+    resultsdict = {}
+    for driver in temp.keys():
+        Race_Ratings = ratings.merge(temp[driver], left_on='id', right_on = 'driverId')
+        Race_Ratings = Race_Ratings.sort_values(by = ['positionDisplayOrder'])
+        Race_Ratings = Race_Ratings.drop_duplicates(subset = 'driverId', keep='first')
+        resultsdict[driver] = Race_Ratings
+        
+    for person in race['driverId']:
+        tempdf = resultsdict[person].reset_index(drop=True)
+        person_idx = tempdf[tempdf['driverId'] == person].index
+        result = resultsdict[person]['rating']
+        new_rating = elo.get_new_ratings(result)[person_idx]
+        ratings.loc[ratings['id'] == person, 'rating'] = new_rating
+    
+    updated_ratings = ratings
+    
+    return updated_ratings
+
+def results_only_teammates(df):
+    """
+    Given a dataframe of race results, returns a dictionary where each key is a driver's name
+    and the value is a dataframe of race results with only their teammates removed.
+    """
+    # Create a dictionary to store the results for each driver
+    results_dict = {}
+
+    # Iterate over unique drivers
+    for driver in df['driverId'].unique():
+        # Get the team of the current driver
+        driver_team = df.loc[df['driverId'] == driver, 'constructorId'].iloc[0]
+
+        # Filter out only the teammates (same team but different driver)
+        filtered_results = df[df['constructorId'] == driver_team]
+
+        # Store the filtered results in the dictionary
+        results_dict[driver] = filtered_results
+
+    return results_dict
+
+def remove_single_row_dfs(df_dict):
+    """Removes DataFrames with only one row from a dictionary of DataFrames."""
+
+    new_df_dict = {}
+    for key, df in df_dict.items():
+        if df.shape[0] > 1:
+            new_df_dict[key] = df
+
+    return new_df_dict
+
+def elo_race_team(racenumber, ratings, elo, df):
+    race, dnf = extract_race(racenumber, df)
+    temp = results_only_teammates(race)
+    temp = remove_single_row_dfs(temp)
+    
+    resultsdict = {}
+    for driver in temp.keys():
+        Race_Ratings = ratings.merge(temp[driver], left_on='id', right_on = 'driverId')
+        Race_Ratings = Race_Ratings.sort_values(by = ['positionDisplayOrder'])
+        Race_Ratings = Race_Ratings.drop_duplicates(subset = 'driverId', keep='first')
+        resultsdict[driver] = Race_Ratings
+        
+    for person in temp.keys():
+        tempdf = resultsdict[person].reset_index(drop=True)
+        person_idx = tempdf[tempdf['driverId'] == person].index
+        result = resultsdict[person]['rating']
+        new_rating = elo.get_new_ratings(result)[person_idx]
+        ratings.loc[ratings['id'] == person, 'rating'] = new_rating
+    
+    updated_ratings = ratings
+    
+    return updated_ratings
