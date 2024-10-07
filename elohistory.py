@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 import pandas as pd
 import racemodule
 from multielo import MultiElo, Player, Tracker
@@ -10,14 +11,15 @@ All_Drivers = pd.read_csv('f1db-drivers.csv')
 unique_combinations = All_Races[['year', 'round']].drop_duplicates().sort_values(['year', 'round']).reset_index(drop=True)
 unique_combinations['date'] = unique_combinations.index
 
-Current_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Current_Rating['rating'] = 1500
+Current_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name', 'dateOfBirth'])
+Current_Rating['dateOfBirth'] = pd.to_datetime(Current_Rating['dateOfBirth'])
+Current_Rating['rating'] = np.where(Current_Rating['dateOfBirth'].dt.year < 1928, 1500, 1450)
 
 Rating_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Rating_History[0] = Current_Rating['rating']
 
 Current_Rating_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Current_Rating_Team['rating'] = 1500
+Current_Rating_Team['rating'] = Current_Rating['rating']
 
 Rating_History_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Rating_History_Team[0] = Current_Rating_Team['rating']
@@ -25,7 +27,7 @@ Rating_History_Team[0] = Current_Rating_Team['rating']
 Blended_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Blended_Rating['rating'] = 0.14*Current_Rating['rating'] + 0.86*Current_Rating_Team['rating']
 Blended_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Blended_History[0] = Current_Rating['rating']
+Blended_History[0] = Blended_Rating['rating']
 
 k = 20
 base = 1
@@ -61,9 +63,16 @@ string_RH_Team = Rating_History_Team.iloc[:, :2]
 Career_High_Team = string_RH_Team.copy()
 Career_High_Team['Max'] = numeric_RH_Team.max(axis=1)
 
-Blended_History = pd.concat([Blended_History, pd.DataFrame(update_dict_team, index=Blended_Rating.index)], axis=1)
+Blended_History = pd.concat([Blended_History, pd.DataFrame(update_dict_blended, index=Blended_Rating.index)], axis=1)
 numeric_RH_Blend = Blended_History.select_dtypes(include='number')
 string_RH_Blend = Blended_History.iloc[:, :2]
 
 Career_High_Blend = string_RH_Blend.copy()
 Career_High_Blend['Max'] = numeric_RH_Blend.max(axis=1)
+
+
+Blended_History.to_csv('blendhistory.csv', index=False)
+
+Rating_History.to_csv('history.csv', index=False)
+
+Rating_History_Team.to_csv('teamhistory.csv', index=False)

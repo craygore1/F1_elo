@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import numpy as np
 
 def race_to_h2h(results, teams):
     """
@@ -208,6 +209,7 @@ def elo_race(racenumber, ratings, elo, df):
         person_idx = tempdf[tempdf['driverId'] == person].index
         result = resultsdict[person]['rating']
         new_rating = elo.get_new_ratings(result)[person_idx]
+        
         ratings.loc[ratings['id'] == person, 'rating'] = new_rating
     
     updated_ratings = ratings
@@ -262,6 +264,7 @@ def elo_race_team(racenumber, ratings, elo, df):
         person_idx = tempdf[tempdf['driverId'] == person].index
         result = resultsdict[person]['rating']
         new_rating = elo.get_new_ratings(result)[person_idx]
+        
         ratings.loc[ratings['id'] == person, 'rating'] = new_rating
     
     updated_ratings = ratings
