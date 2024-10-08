@@ -25,7 +25,7 @@ Active_History = onlyactive.copy()
 Active_History.insert(0,'id',Blended_History['id'])
 Active_History.insert(1,'name',Blended_History['name'])
 
-rollnum = 100
+rollnum = 300
 Rolling_Blend = onlyactive.rolling(rollnum, axis=1).mean(skipna=True).iloc[:, rollnum:]
 
 Career_High_Average = Blended_History[['id','name']].copy()
