@@ -10,7 +10,7 @@ All_Drivers = pd.read_csv('f1db-drivers.csv')
 
 Current_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name', 'dateOfBirth'])
 Current_Rating['dateOfBirth'] = pd.to_datetime(Current_Rating['dateOfBirth'])
-Current_Rating['rating'] = np.where(Current_Rating['dateOfBirth'].dt.year < 1930, 1500, 1450)
+Current_Rating['rating'] = np.where(Current_Rating['dateOfBirth'].dt.year < 1930, 1450, 1300)
 
 Rating_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Rating_History[0] = Current_Rating['rating']
@@ -22,11 +22,11 @@ Rating_History_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Rating_History_Team[0] = Current_Rating_Team['rating']
 
 Blended_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Blended_Rating['rating'] = 0.2*Current_Rating['rating'] + 0.8*Current_Rating_Team['rating']
+Blended_Rating['rating'] = 0.25*Current_Rating['rating'] + 0.75*Current_Rating_Team['rating']
 Blended_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Blended_History[0] = Blended_Rating['rating']
 
-k = 20
+k = 32
 base = 1
 
 elo_custom = MultiElo(k_value=k, score_function_base=base)
@@ -35,6 +35,9 @@ update_dict = {}
 update_dict_team = {}
 update_dict_blended = {}
 for i in range(1, max(All_Races['raceId'])+1):
+    if i == 70:
+        k = 24
+        elo_custom = MultiElo(k_value=k)
     updated_ratings = racemodule.elo_race(i, Current_Rating, elo_custom, All_Races)
     Current_Rating['rating'] = updated_ratings['rating']
     update_dict[i] = Current_Rating['rating']

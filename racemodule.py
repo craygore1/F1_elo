@@ -223,7 +223,7 @@ def elo_race(racenumber, ratings, elo, df):
     
     difference = target_mean - current_mean
     
-    # Normalize the 'rating' column to the target mean
+    # Normalize the rating to the target mean
     updatedf['rating'] = updatedf['rating'] + difference
     
     df1_subset = ratings[['id', 'rating']].set_index('id')
@@ -300,7 +300,7 @@ def elo_race_team(racenumber, ratings, elo, df):
     
     difference = target_mean - current_mean
     
-    # Normalize the 'rating' column to the target mean
+    # Normalize the rating to the target mean
     updatedf['rating'] = updatedf['rating'] + difference
     
     df1_subset = ratings[['id', 'rating']].set_index('id')
