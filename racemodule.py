@@ -196,8 +196,10 @@ def results_without_teammates(df):
 def elo_race(racenumber, ratings, elo, df):
     race, dnf = extract_race(racenumber, df)
     temp = results_without_teammates(race)
+    target_mean = 1500
     
     resultsdict = {}
+    updatedict = {}
     for driver in temp.keys():
         Race_Ratings = ratings.merge(temp[driver], left_on='id', right_on = 'driverId')
         Race_Ratings = Race_Ratings.sort_values(by = ['positionDisplayOrder'])
@@ -209,11 +211,29 @@ def elo_race(racenumber, ratings, elo, df):
         person_idx = tempdf[tempdf['driverId'] == person].index
         result = resultsdict[person]['rating']
         new_rating = elo.get_new_ratings(result)[person_idx]
+        updatedict[person] = new_rating
         
-        ratings.loc[ratings['id'] == person, 'rating'] = new_rating
+        #ratings.loc[ratings['id'] == person, 'rating'] = new_rating
+    
+    updatedf = pd.DataFrame.from_dict(updatedict, orient='index').reset_index()
+    updatedf.columns = ['id', 'rating']
+    
+    target_mean = 1500
+    current_mean = updatedf['rating'].mean()
+    
+    difference = target_mean - current_mean
+    
+    # Normalize the 'rating' column to the target mean
+    updatedf['rating'] = updatedf['rating'] + difference
+    
+    df1_subset = ratings[['id', 'rating']].set_index('id')
+    df2_subset = updatedf[['id', 'rating']].set_index('id')
+    
+    df1_subset.update(df2_subset, overwrite=True)
+    
+    ratings['rating'] = df1_subset['rating'].values
     
     updated_ratings = ratings
-    
     return updated_ratings
 
 def results_only_teammates(df):
@@ -251,8 +271,12 @@ def elo_race_team(racenumber, ratings, elo, df):
     race, dnf = extract_race(racenumber, df)
     temp = results_only_teammates(race)
     temp = remove_single_row_dfs(temp)
+    if not bool(temp):
+        updated_ratings = ratings
+        return updated_ratings
     
     resultsdict = {}
+    updatedict = {}
     for driver in temp.keys():
         Race_Ratings = ratings.merge(temp[driver], left_on='id', right_on = 'driverId')
         Race_Ratings = Race_Ratings.sort_values(by = ['positionDisplayOrder'])
@@ -264,8 +288,27 @@ def elo_race_team(racenumber, ratings, elo, df):
         person_idx = tempdf[tempdf['driverId'] == person].index
         result = resultsdict[person]['rating']
         new_rating = elo.get_new_ratings(result)[person_idx]
+        updatedict[person] = new_rating
         
-        ratings.loc[ratings['id'] == person, 'rating'] = new_rating
+        #ratings.loc[ratings['id'] == person, 'rating'] = new_rating
+    
+    updatedf = pd.DataFrame.from_dict(updatedict, orient='index').reset_index()
+    updatedf.columns = ['id', 'rating']
+    
+    target_mean = 1500
+    current_mean = updatedf['rating'].mean()
+    
+    difference = target_mean - current_mean
+    
+    # Normalize the 'rating' column to the target mean
+    updatedf['rating'] = updatedf['rating'] + difference
+    
+    df1_subset = ratings[['id', 'rating']].set_index('id')
+    df2_subset = updatedf[['id', 'rating']].set_index('id')
+    
+    df1_subset.update(df2_subset, overwrite=True)
+    
+    ratings['rating'] = df1_subset['rating'].values
     
     updated_ratings = ratings
     

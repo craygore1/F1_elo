@@ -8,12 +8,9 @@ from multielo import MultiElo, Player, Tracker
 All_Races = pd.read_csv('f1db-races-race-results.csv')
 All_Drivers = pd.read_csv('f1db-drivers.csv')
 
-unique_combinations = All_Races[['year', 'round']].drop_duplicates().sort_values(['year', 'round']).reset_index(drop=True)
-unique_combinations['date'] = unique_combinations.index
-
 Current_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name', 'dateOfBirth'])
 Current_Rating['dateOfBirth'] = pd.to_datetime(Current_Rating['dateOfBirth'])
-Current_Rating['rating'] = np.where(Current_Rating['dateOfBirth'].dt.year < 1928, 1500, 1450)
+Current_Rating['rating'] = np.where(Current_Rating['dateOfBirth'].dt.year < 1930, 1500, 1450)
 
 Rating_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Rating_History[0] = Current_Rating['rating']
@@ -25,7 +22,7 @@ Rating_History_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Rating_History_Team[0] = Current_Rating_Team['rating']
 
 Blended_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Blended_Rating['rating'] = 0.14*Current_Rating['rating'] + 0.86*Current_Rating_Team['rating']
+Blended_Rating['rating'] = 0.2*Current_Rating['rating'] + 0.8*Current_Rating_Team['rating']
 Blended_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
 Blended_History[0] = Blended_Rating['rating']
 
@@ -46,7 +43,7 @@ for i in range(1, max(All_Races['raceId'])+1):
     Current_Rating_Team['rating'] = team_ratings['rating']
     update_dict_team[i] = Current_Rating_Team['rating']
     
-    Blended_Rating['rating'] = 0.14*Current_Rating['rating'] + 0.86*Current_Rating_Team['rating']
+    Blended_Rating['rating'] = 0.2*Current_Rating['rating'] + 0.8*Current_Rating_Team['rating']
     update_dict_blended[i] = Blended_Rating['rating']
     
 Rating_History = pd.concat([Rating_History, pd.DataFrame(update_dict, index=Current_Rating.index)], axis=1)

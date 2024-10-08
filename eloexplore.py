@@ -30,14 +30,8 @@ plt.title("Average Rating of Active Drivers", fontsize=16, fontweight='bold')
 plt.xlabel("Race Number", fontsize=14)
 plt.ylabel("Rating", fontsize=14)
 
-# Enable Grid
+plt.ylim([1400, 1800])
 plt.grid(True, linestyle='--', alpha=0.6)
 
-# Show Legend
-plt.legend(loc='upper right', fontsize=12, frameon=True, shadow=True)
-
-# Tight Layout for Spacing
 plt.tight_layout()
-
-# Show the Plot
 plt.show()
