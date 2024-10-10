@@ -6,80 +6,178 @@ import racemodule
 from multielo import MultiElo, Player, Tracker
 
 All_Races = pd.read_csv('f1db-races-race-results.csv')
+All_Quali = pd.read_csv('f1db-races-qualifying-results.csv')
 All_Drivers = pd.read_csv('f1db-drivers.csv')
 
-Current_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name', 'dateOfBirth'])
-Current_Rating['dateOfBirth'] = pd.to_datetime(Current_Rating['dateOfBirth'])
-Current_Rating['rating'] = np.where(Current_Rating['dateOfBirth'].dt.year < 1920, 1500, 1425)
+# Function to create initial dataframes and set ratings
+def create_driver_data(all_drivers, default_rating=1425, old_driver_rating=1500):
+    df = pd.DataFrame(data=all_drivers, columns=['id', 'name', 'dateOfBirth'])
+    df['dateOfBirth'] = pd.to_datetime(df['dateOfBirth'])
+    df['rating'] = np.where(df['dateOfBirth'].dt.year < 1920, old_driver_rating, default_rating)
+    return df
 
-Rating_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Rating_History[0] = Current_Rating['rating']
+# Function to create rating history dataframes
+def create_rating_history(all_drivers, rating_column):
+    history = pd.DataFrame(data=all_drivers, columns=['id', 'name'])
+    history[0] = rating_column
+    return history
 
-Current_Rating_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
+Current_Rating = create_driver_data(All_Drivers)
+Current_Quali = create_driver_data(All_Drivers)
+
+Rating_History = create_rating_history(All_Drivers, Current_Rating['rating'])
+Quali_History = create_rating_history(All_Drivers, Current_Quali['rating'])
+
+Current_Rating_Team = Current_Rating[['id', 'name']].copy()
 Current_Rating_Team['rating'] = Current_Rating['rating']
 
-Rating_History_Team = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Rating_History_Team[0] = Current_Rating_Team['rating']
+Current_Quali_Team = Current_Quali[['id', 'name']].copy()
+Current_Quali_Team['rating'] = Current_Quali['rating']
 
-Blended_Rating = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Blended_Rating['rating'] = 0.25*Current_Rating['rating'] + 0.75*Current_Rating_Team['rating']
-Blended_History = pd.DataFrame(data=All_Drivers, columns=['id', 'name'])
-Blended_History[0] = Blended_Rating['rating']
+Rating_History_Team = create_rating_history(All_Drivers, Current_Rating_Team['rating'])
+Quali_History_Team = create_rating_history(All_Drivers, Current_Quali_Team['rating'])
 
-k = 20
+# Function to create Blended Rating and History
+def create_blended_data(all_drivers, rating1, rating2, weight1=0.25, weight2=0.75):
+    blended = pd.DataFrame(data=all_drivers, columns=['id', 'name'])
+    blended['rating'] = weight1 * rating1 + weight2 * rating2
+    blended_history = create_rating_history(all_drivers, blended['rating'])
+    return blended, blended_history
+
+Blended_Rating, Blended_History = create_blended_data(All_Drivers, Current_Rating['rating'], Current_Rating_Team['rating'])
+Blended_Quali, Blended_History_Quali = create_blended_data(All_Drivers, Current_Quali['rating'], Current_Quali_Team['rating'])
+
+
+k = 24
+k_team = 16
 base = 1
 
 elo_custom = MultiElo(k_value=k, score_function_base=base)
+elo_team = MultiElo(k_value=k_team, score_function_base=base)
 
-update_dict = {}
-update_dict_team = {}
-update_dict_blended = {}
-for i in range(1, max(All_Races['raceId'])+1):
-    if i == 3:
-        k = 8
-        elo_custom = MultiElo(k_value=k, score_function_base=base)
-    elif i == 4:
-        k = 16
-        elo_custom = MultiElo(k_value=k, score_function_base=base)
-    elif i == 70:
-        k = 20
-        elo_custom = MultiElo(k_value=k, score_function_base=base)
-        
-    updated_ratings = racemodule.elo_race(i, Current_Rating, elo_custom, All_Races)
-    Current_Rating['rating'] = updated_ratings['rating']
-    update_dict[i] = Current_Rating['rating']
+indy = [3, 9, 17, 25, 34, 44, 51, 59, 68, 77, 87] #indy500 racenumbers
+
+# =============================================================================
+# update_dict = {}
+# update_dict_team = {}
+# update_dict_quali = {}
+# update_dict_quali_team = {}
+# update_dict_blended = {}
+# update_dict_quali_blended = {}
+# for i in range(1, max(All_Races['raceId'])+1):
+#     if i in indy: #indy500 k factor adjustment
+#         k = 8
+#         k_team = 8
+#         elo_custom = MultiElo(k_value=k, score_function_base=base)
+#         elo_team = MultiElo(k_value=k_team, score_function_base=base)
+#     else:
+#         k = 24
+#         k_team = 16
+#         elo_custom = MultiElo(k_value=k, score_function_base=base)
+#         elo_team = MultiElo(k_value=k_team, score_function_base=base)
+#         
+#     updated_ratings = racemodule.elo_race(i, Current_Rating, elo_custom, All_Races)
+#     Current_Rating['rating'] = updated_ratings['rating']
+#     update_dict[i] = Current_Rating['rating']
+#     
+#     team_ratings = racemodule.elo_race_team(i, Current_Rating_Team, elo_team, All_Races)
+#     Current_Rating_Team['rating'] = team_ratings['rating']
+#     update_dict_team[i] = Current_Rating_Team['rating']
+#     
+#     updated_quali = racemodule.elo_race(i, Current_Rating, elo_custom, All_Races)
+#     Current_Quali['rating'] = updated_quali['rating']
+#     update_dict_quali[i] = Current_Quali['rating']
+#     
+#     team_quali = racemodule.elo_race_team(i, Current_Rating_Team, elo_team, All_Races)
+#     Current_Quali_Team['rating'] = team_quali['rating']
+#     update_dict_quali_team[i] = Current_Quali_Team['rating']
+#     
+#     Blended_Rating['rating'] = 0.25*Current_Rating['rating'] + 0.75*Current_Rating_Team['rating']
+#     update_dict_blended[i] = Blended_Rating['rating']
+#     
+#     Blended_Quali['rating'] = 0.25*Current_Quali['rating'] + 0.75*Current_Quali_Team['rating']
+#     update_dict_quali_blended[i] = Blended_Quali['rating']
+# =============================================================================
     
-    team_ratings = racemodule.elo_race_team(i, Current_Rating_Team, elo_custom, All_Races)
-    Current_Rating_Team['rating'] = team_ratings['rating']
-    update_dict_team[i] = Current_Rating_Team['rating']
+# Function to update ratings for a given race
+def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df, quali_team_df, blended_df, quali_blended_df, base_value):
+    # Adjust k values based on the race type (Indy 500 or others)
+    k = 8 if is_indy else 24
+    k_team = 8 if is_indy else 16
     
-    Blended_Rating['rating'] = 0.25*Current_Rating['rating'] + 0.75*Current_Rating_Team['rating']
-    update_dict_blended[i] = Blended_Rating['rating']
+    elo_custom = MultiElo(k_value=k, score_function_base=base_value)
+    elo_team = MultiElo(k_value=k_team, score_function_base=base_value)
     
-Rating_History = pd.concat([Rating_History, pd.DataFrame(update_dict, index=Current_Rating.index)], axis=1)
-numeric_RH = Rating_History.select_dtypes(include='number')
-string_RH = Rating_History.iloc[:, :2]
+    # Update driver ratings
+    updated_ratings = racemodule.elo_race(race_id, current_df, elo_custom, All_Races)
+    current_df['rating'] = updated_ratings['rating']
+    
+    # Update team ratings
+    team_ratings = racemodule.elo_race_team(race_id, current_team_df, elo_team, All_Races)
+    current_team_df['rating'] = team_ratings['rating']
+    
+    # Update qualifying ratings
+    updated_quali = racemodule.elo_race(race_id, quali_df, elo_custom, All_Races)
+    quali_df['rating'] = updated_quali['rating']
+    
+    # Update qualifying team ratings
+    team_quali = racemodule.elo_race_team(race_id, quali_team_df, elo_team, All_Races)
+    quali_team_df['rating'] = team_quali['rating']
+    
+    # Calculate blended ratings
+    blended_df['rating'] = 0.25 * current_df['rating'] + 0.75 * current_team_df['rating']
+    quali_blended_df['rating'] = 0.25 * quali_df['rating'] + 0.75 * quali_team_df['rating']
+    
+    # Return the updated ratings in dictionary format
+    return (current_df['rating'].copy(), team_ratings['rating'].copy(), 
+            quali_df['rating'].copy(), team_quali['rating'].copy(), 
+            blended_df['rating'].copy(), quali_blended_df['rating'].copy())
 
-Career_High = string_RH.copy()
-Career_High['Max'] = numeric_RH.max(axis=1)
+# Initialize dictionaries to store updated ratings for each race
+update_dict, update_dict_team = {}, {}
+update_dict_quali, update_dict_quali_team = {}, {}
+update_dict_blended, update_dict_quali_blended = {}, {}
 
-Rating_History_Team = pd.concat([Rating_History_Team, pd.DataFrame(update_dict_team, index=Current_Rating_Team.index)], axis=1)
-numeric_RH_Team = Rating_History_Team.select_dtypes(include='number')
-string_RH_Team = Rating_History_Team.iloc[:, :2]
+# Iterate through all races and update ratings
+for i in range(1, max(All_Races['raceId']) + 1):
+    # Check if the race is an Indy 500 race
+    is_indy_race = i in indy
 
-Career_High_Team = string_RH_Team.copy()
-Career_High_Team['Max'] = numeric_RH_Team.max(axis=1)
+    # Update ratings and get the updated dictionaries
+    (update_dict[i], update_dict_team[i], 
+     update_dict_quali[i], update_dict_quali_team[i], 
+     update_dict_blended[i], update_dict_quali_blended[i]) = update_ratings(
+        race_id=i,
+        is_indy=is_indy_race,
+        current_df=Current_Rating,
+        current_team_df=Current_Rating_Team,
+        quali_df=Current_Quali,
+        quali_team_df=Current_Quali_Team,
+        blended_df=Blended_Rating,
+        quali_blended_df=Blended_Quali,
+        base_value=base
+    )
+    
+# Function to create Career High and Career History
+def history_and_high(df, update_dict, index):
+    df = pd.concat([df, pd.DataFrame(update_dict, index=index)], axis=1)
+    
+    # Separate numeric and string columns
+    numeric_df = df.select_dtypes(include='number')
+    string_df = df.iloc[:, :2]  # Assuming the first two columns are string-type
+    
+    # Create a copy and calculate career high
+    Career_High = string_df.copy()
+    Career_High['Max'] = numeric_df.max(axis=1)
+    
+    History = df.copy()
+    return History, Career_High
 
-Blended_History = pd.concat([Blended_History, pd.DataFrame(update_dict_blended, index=Blended_Rating.index)], axis=1)
-numeric_RH_Blend = Blended_History.select_dtypes(include='number')
-string_RH_Blend = Blended_History.iloc[:, :2]
-
-Career_High_Blend = string_RH_Blend.copy()
-Career_High_Blend['Max'] = numeric_RH_Blend.max(axis=1)
+Rating_History, Career_High = history_and_high(Rating_History, update_dict, Current_Rating.index)
+Rating_History_Team, Career_High_Team = history_and_high(Rating_History_Team, update_dict_team, Current_Rating_Team.index)
+Blended_History, Career_High_Blend = history_and_high(Blended_History, update_dict_blended, Blended_Rating.index)
 
 
 Blended_History.to_csv('blendhistory.csv', index=False)
-
 Rating_History.to_csv('history.csv', index=False)
-
 Rating_History_Team.to_csv('teamhistory.csv', index=False)

@@ -25,14 +25,14 @@ Active_History = onlyactive.copy()
 Active_History.insert(0,'id',Blended_History['id'])
 Active_History.insert(1,'name',Blended_History['name'])
 
-rollnum = 300
+rollnum = 250
 Rolling_Blend = onlyactive.rolling(rollnum, axis=1).mean(skipna=True).iloc[:, rollnum:]
 
 Career_High_Average = Blended_History[['id','name']].copy()
 Career_High_Average = pd.concat([Career_High_Average, Rolling_Blend.max(axis=1)], axis=1)
 
 plt.figure(figsize=(10, 6))
-Drivers = ["lewis-hamilton", "fernando-alonso", "sebastian-vettel", "max-verstappen", "lance-stroll"]
+Drivers = ["lewis-hamilton", "fernando-alonso", "sebastian-vettel", "max-verstappen", "sergio-perez"]
 for Driver in Drivers:
     ser = Active_History[Active_History['id'] == Driver].select_dtypes(include='number')
     ser = ser.iloc[0,:]
