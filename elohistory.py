@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 import racemodule
 from multielo import MultiElo, Player, Tracker
+import time
+
+start_time = time.time()
 
 All_Races = pd.read_csv('f1db-races-race-results.csv')
 All_Quali = pd.read_csv('f1db-races-qualifying-results.csv')
@@ -46,7 +49,7 @@ def create_blended_data(all_drivers, rating1, rating2, weight1=0.25, weight2=0.7
 
 Blended_Rating, Blended_History = create_blended_data(All_Drivers, Current_Rating['rating'], Current_Rating_Team['rating'])
 Blended_Quali, Blended_History_Quali = create_blended_data(All_Drivers, Current_Quali['rating'], Current_Quali_Team['rating'])
-
+Full_Blend, Full_Blend_History = create_blended_data(All_Drivers, Blended_Quali['rating'], Blended_Rating['rating'], weight1=0.2, weight2=0.8)
 
 k = 24
 k_team = 16
@@ -56,51 +59,11 @@ elo_custom = MultiElo(k_value=k, score_function_base=base)
 elo_team = MultiElo(k_value=k_team, score_function_base=base)
 
 indy = [3, 9, 17, 25, 34, 44, 51, 59, 68, 77, 87] #indy500 racenumbers
-
-# =============================================================================
-# update_dict = {}
-# update_dict_team = {}
-# update_dict_quali = {}
-# update_dict_quali_team = {}
-# update_dict_blended = {}
-# update_dict_quali_blended = {}
-# for i in range(1, max(All_Races['raceId'])+1):
-#     if i in indy: #indy500 k factor adjustment
-#         k = 8
-#         k_team = 8
-#         elo_custom = MultiElo(k_value=k, score_function_base=base)
-#         elo_team = MultiElo(k_value=k_team, score_function_base=base)
-#     else:
-#         k = 24
-#         k_team = 16
-#         elo_custom = MultiElo(k_value=k, score_function_base=base)
-#         elo_team = MultiElo(k_value=k_team, score_function_base=base)
-#         
-#     updated_ratings = racemodule.elo_race(i, Current_Rating, elo_custom, All_Races)
-#     Current_Rating['rating'] = updated_ratings['rating']
-#     update_dict[i] = Current_Rating['rating']
-#     
-#     team_ratings = racemodule.elo_race_team(i, Current_Rating_Team, elo_team, All_Races)
-#     Current_Rating_Team['rating'] = team_ratings['rating']
-#     update_dict_team[i] = Current_Rating_Team['rating']
-#     
-#     updated_quali = racemodule.elo_race(i, Current_Rating, elo_custom, All_Races)
-#     Current_Quali['rating'] = updated_quali['rating']
-#     update_dict_quali[i] = Current_Quali['rating']
-#     
-#     team_quali = racemodule.elo_race_team(i, Current_Rating_Team, elo_team, All_Races)
-#     Current_Quali_Team['rating'] = team_quali['rating']
-#     update_dict_quali_team[i] = Current_Quali_Team['rating']
-#     
-#     Blended_Rating['rating'] = 0.25*Current_Rating['rating'] + 0.75*Current_Rating_Team['rating']
-#     update_dict_blended[i] = Blended_Rating['rating']
-#     
-#     Blended_Quali['rating'] = 0.25*Current_Quali['rating'] + 0.75*Current_Quali_Team['rating']
-#     update_dict_quali_blended[i] = Blended_Quali['rating']
-# =============================================================================
     
 # Function to update ratings for a given race
-def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df, quali_team_df, blended_df, quali_blended_df, base_value):
+def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df, 
+                   quali_team_df, blended_df, quali_blended_df, full_blend_df, 
+                   base_value):
     # Adjust k values based on the race type (Indy 500 or others)
     k = 8 if is_indy else 24
     k_team = 8 if is_indy else 16
@@ -117,26 +80,28 @@ def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df, qual
     current_team_df['rating'] = team_ratings['rating']
     
     # Update qualifying ratings
-    updated_quali = racemodule.elo_race(race_id, quali_df, elo_custom, All_Races)
+    updated_quali = racemodule.elo_race(race_id, quali_df, elo_custom, All_Quali)
     quali_df['rating'] = updated_quali['rating']
     
     # Update qualifying team ratings
-    team_quali = racemodule.elo_race_team(race_id, quali_team_df, elo_team, All_Races)
+    team_quali = racemodule.elo_race_team(race_id, quali_team_df, elo_team, All_Quali)
     quali_team_df['rating'] = team_quali['rating']
     
     # Calculate blended ratings
     blended_df['rating'] = 0.25 * current_df['rating'] + 0.75 * current_team_df['rating']
-    quali_blended_df['rating'] = 0.25 * quali_df['rating'] + 0.75 * quali_team_df['rating']
+    quali_blended_df['rating'] = 0.25 * quali_df['rating'] + 0.75 * quali_team_df['rating'] 
+    full_blend_df['rating'] = 0.2 * quali_blended_df['rating'] + 0.8 * blended_df['rating']
     
     # Return the updated ratings in dictionary format
     return (current_df['rating'].copy(), team_ratings['rating'].copy(), 
             quali_df['rating'].copy(), team_quali['rating'].copy(), 
-            blended_df['rating'].copy(), quali_blended_df['rating'].copy())
+            blended_df['rating'].copy(), quali_blended_df['rating'].copy(), 
+            full_blend_df['rating'].copy())
 
-# Initialize dictionaries to store updated ratings for each race
 update_dict, update_dict_team = {}, {}
 update_dict_quali, update_dict_quali_team = {}, {}
 update_dict_blended, update_dict_quali_blended = {}, {}
+update_dict_full_blend = {}
 
 # Iterate through all races and update ratings
 for i in range(1, max(All_Races['raceId']) + 1):
@@ -146,7 +111,8 @@ for i in range(1, max(All_Races['raceId']) + 1):
     # Update ratings and get the updated dictionaries
     (update_dict[i], update_dict_team[i], 
      update_dict_quali[i], update_dict_quali_team[i], 
-     update_dict_blended[i], update_dict_quali_blended[i]) = update_ratings(
+     update_dict_blended[i], update_dict_quali_blended[i], 
+     update_dict_full_blend[i]) = update_ratings(
         race_id=i,
         is_indy=is_indy_race,
         current_df=Current_Rating,
@@ -155,6 +121,7 @@ for i in range(1, max(All_Races['raceId']) + 1):
         quali_team_df=Current_Quali_Team,
         blended_df=Blended_Rating,
         quali_blended_df=Blended_Quali,
+        full_blend_df=Full_Blend,
         base_value=base
     )
     
@@ -176,8 +143,14 @@ def history_and_high(df, update_dict, index):
 Rating_History, Career_High = history_and_high(Rating_History, update_dict, Current_Rating.index)
 Rating_History_Team, Career_High_Team = history_and_high(Rating_History_Team, update_dict_team, Current_Rating_Team.index)
 Blended_History, Career_High_Blend = history_and_high(Blended_History, update_dict_blended, Blended_Rating.index)
+Blended_History_Quali, Career_High_Quali_Blend = history_and_high(Blended_History_Quali, update_dict_quali_blended, Blended_Quali.index)
+Full_Blend_History, Career_High_Full_Blend = history_and_high(Full_Blend_History, update_dict_full_blend, Full_Blend.index)
 
-
-Blended_History.to_csv('blendhistory.csv', index=False)
+Full_Blend_History.to_csv('blendhistory.csv', index=False)
+Blended_History_Quali.to_csv('qualihistory.csv', index=False)
 Rating_History.to_csv('history.csv', index=False)
 Rating_History_Team.to_csv('teamhistory.csv', index=False)
+
+end_time = time.time()
+elapsed_time = end_time - start_time
+print(elapsed_time)
