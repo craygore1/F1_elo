@@ -54,6 +54,13 @@ def get_year_round(race_numbers):
     myround = filtered_races['round']
     return year, myround
 
+def get_seasons(df): #FUnction to get season starts and ends
+    starts = All_Races[All_Races['round'] == 1]['raceId']
+    starts = list(dict.fromkeys(starts))
+    ends = starts[1:]
+    ends = [x-1 for x in ends]
+    return starts, ends                          
+
 def adjust_fig_width(ax, xtick_labels, label_fontsize=10, padding=2):
     max_label_length = max([len(label) for label in xtick_labels])
     
@@ -65,39 +72,50 @@ def adjust_fig_width(ax, xtick_labels, label_fontsize=10, padding=2):
     
     # Set new width proportional to the label length
     ax.figure.set_size_inches(fig_width + width_scale + padding, fig_height)
-    
 
-def plot_career(history, drivers, title):
+def apply_plot_style(ax, marker_size=6):
+    """
+    Parameters: ax : Axes object
+    """
+    colorblind_palette = ['#0072B2', '#D55E00', '#E69F00', '#009E73', '#F0E442', 
+                          '#56B4E9', '#CC79A7', '#999999', '#F781BF', '#A65628']
+    
+    # Different line styles and markers for visual distinction
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--']
+    markers = ['o', 's', 'D', '^', 'v', '>', '<', 'p', 'h', '*']
+    
+    # Get all line objects from the plot (ax)
+    lines = ax.get_lines()
+    
+    # Apply colors, linestyles, and markers to each line
+    for i, line in enumerate(lines):
+        color = colorblind_palette[i % len(colorblind_palette)]   
+        linestyle = linestyles[i % len(linestyles)]               
+        marker = markers[i % len(markers)]                        
+        line.set_color(color)
+        line.set_linestyle(linestyle)
+        line.set_marker(marker)
+        line.set_markersize(marker_size)
+
+def set_myxticks(xtick_positions, min_val, max_val, start_year=1950):
+    # Filter the xtick positions to include only those within the min and max range
+    filtered_xticks = [pos for pos in xtick_positions if min_val <= pos <= max_val]
+    
+    # Generate corresponding labels starting from the base year and matching filtered ticks
+    labels = list(range(start_year, start_year + len(xtick_positions)))
+    filtered_labels = [labels[xtick_positions.index(pos)] for pos in filtered_xticks]
+    
+    plt.xticks(filtered_xticks, filtered_labels)
+    return str(filtered_labels)
+
+def plot_career(df, history, drivers, title):
     fig, ax1 = plt.subplots()
     globmin = 5000
     globmax = 0
     racemin = 5000
     racemax = 0
     
-    def apply_plot_style(ax, marker_size=6):
-        """
-        Parameters: ax : Axes object
-        """
-        colorblind_palette = ['#0072B2', '#D55E00', '#E69F00', '#009E73', '#F0E442', 
-                              '#56B4E9', '#CC79A7', '#999999', '#F781BF', '#A65628']
-        
-        # Different line styles and markers for visual distinction
-        linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--']
-        markers = ['o', 's', 'D', '^', 'v', '>', '<', 'p', 'h', '*']
-        
-        # Get all line objects from the plot (ax)
-        lines = ax.get_lines()
-        
-        # Apply colors, linestyles, and markers to each line, cycling through the options if needed
-        for i, line in enumerate(lines):
-            color = colorblind_palette[i % len(colorblind_palette)]   
-            linestyle = linestyles[i % len(linestyles)]               
-            marker = markers[i % len(markers)]                        
-            line.set_color(color)
-            line.set_linestyle(linestyle)
-            line.set_marker(marker)
-            line.set_markersize(marker_size)
-    
+    starts, ends = get_seasons(df)
     for i, Driver in enumerate(drivers):
         ser = history[history['id'] == Driver].select_dtypes(include='number')
         ser = ser.iloc[0,:]
@@ -120,22 +138,19 @@ def plot_career(history, drivers, title):
     
     years, rounds = get_year_round(racenumbers)
     years = list(dict.fromkeys(years))
-
-    myticks = np.ceil(np.linspace(racemin, racemax, len(years))).astype(int)
-    myticklabels = [f'{int(y)}' for y in years]
-    myticklabels = myticklabels[1:] + ['']
+    
+    myticklabels = set_myxticks(starts, racemin, racemax)
     
     ax1.set_xlabel('Year')
     ax1.set_ylabel("Rating")
     ax1.set_xlim([globmin, globmax])
-    ax1.set_xticks(myticks)
-    ax1.set_xticklabels(myticklabels)
+
     
-    adjust_fig_width(ax1, myticklabels)
+    adjust_fig_width(ax1, myticklabels, padding=8)
     
     plt.title(title, fontsize=16, fontweight='bold')
     
-    ax1.set_ylim([1300, 1800])
+    ax1.set_ylim([1300, 2000])
     ax1.grid(True, linestyle='--', alpha=0.6)
     
     plt.tight_layout()    
@@ -145,8 +160,6 @@ def plot_career(history, drivers, title):
     plt.show()
 
 
-
-
-Drivers = ["alain-prost", "nigel-mansell", "ayrton-senna"]
-plot_career(Active_History, Drivers, 'Driver History')
+Drivers = ["nigel-mansell", "ayrton-senna", 'alain-prost']
+plot_career(All_Races, Active_Quali, Drivers, 'Driver History')
 
