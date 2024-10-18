@@ -51,8 +51,8 @@ Blended_Rating, Blended_History = create_blended_data(All_Drivers, Current_Ratin
 Blended_Quali, Blended_History_Quali = create_blended_data(All_Drivers, Current_Quali['rating'], Current_Quali_Team['rating'])
 Full_Blend, Full_Blend_History = create_blended_data(All_Drivers, Blended_Quali['rating'], Blended_Rating['rating'], weight1=0.2, weight2=0.8)
 
-k = 24
-k_team = 16
+k = 32
+k_team = 24
 base = 1
 
 elo_custom = MultiElo(k_value=k, score_function_base=base)
@@ -65,8 +65,8 @@ def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df,
                    quali_team_df, blended_df, quali_blended_df, full_blend_df, 
                    base_value):
     # Adjust k values based on the race type (Indy 500 or others)
-    k = 8 if is_indy else 24
-    k_team = 8 if is_indy else 16
+    k = 8 if is_indy else 32
+    k_team = 8 if is_indy else 24
     
     elo_custom = MultiElo(k_value=k, score_function_base=base_value)
     elo_team = MultiElo(k_value=k_team, score_function_base=base_value)

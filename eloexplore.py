@@ -36,7 +36,7 @@ def get_active_history(history): # Function to get active history
 Active_History = get_active_history(Blended_History)
 Active_Quali = get_active_history(Quali_History)
 
-window = 100
+window = 200
 def rolling_high(history, window): #Function to calculate career high rolling average over variable window
     Rolling = history.select_dtypes('number').rolling(window, axis=1).mean(skipna=True).iloc[:, window:]
     
@@ -105,6 +105,7 @@ def set_myxticks(xtick_positions, min_val, max_val, start_year=1950):
     labels = list(range(start_year, start_year + len(xtick_positions)))
     filtered_labels = [labels[xtick_positions.index(pos)] for pos in filtered_xticks]
     
+    filtered_xticks = [pos-5 for pos in filtered_xticks]
     plt.xticks(filtered_xticks, filtered_labels)
     return str(filtered_labels)
 
@@ -132,7 +133,11 @@ def plot_career(df, history, drivers, title):
         if int(ser.last_valid_index()) > racemax:
             racemax = int(ser.last_valid_index())
         
-        ax1.plot(ser)
+        ax1.plot(ser.index, ser)
+        
+        line = plt.gca().get_lines()[0]  # Get the first line object
+        x_values = line.get_xdata()
+        y_values = line.get_ydata()
     
     racenumbers = range(racemin, racemax+1)
     
@@ -150,7 +155,7 @@ def plot_career(df, history, drivers, title):
     
     plt.title(title, fontsize=16, fontweight='bold')
     
-    ax1.set_ylim([1300, 2000])
+    ax1.set_ylim([1200, 1800])
     ax1.grid(True, linestyle='--', alpha=0.6)
     
     plt.tight_layout()    
@@ -160,6 +165,8 @@ def plot_career(df, history, drivers, title):
     plt.show()
 
 
-Drivers = ["nigel-mansell", "ayrton-senna", 'alain-prost']
-plot_career(All_Races, Active_Quali, Drivers, 'Driver History')
+Drivers = ["fernando-alonso", "lewis-hamilton", "max-verstappen"]
+plot_career(All_Races, Active_History, Drivers, 'Driver History')
+
+Active_History.to_csv('activehistory.csv', index=False)
 
