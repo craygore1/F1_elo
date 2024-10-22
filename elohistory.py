@@ -52,7 +52,7 @@ Blended_Quali, Blended_History_Quali = create_blended_data(All_Drivers, Current_
 Full_Blend, Full_Blend_History = create_blended_data(All_Drivers, Blended_Quali['rating'], Blended_Rating['rating'], weight1=0.2, weight2=0.8)
 
 k = 32
-k_team = 24
+k_team = 26
 base = 1
 
 elo_custom = MultiElo(k_value=k, score_function_base=base)

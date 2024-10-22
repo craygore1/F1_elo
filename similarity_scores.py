@@ -4,8 +4,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.interpolate import UnivariateSpline
+from tensorflow.keras.models import load_model
 
 Active_History = pd.read_csv('activehistory.csv')
+nn_model = load_model('nn_ratings_model.h5')
 
 def get_ratings_dict(df):
     ratings_dict = {}
@@ -18,6 +20,19 @@ def get_ratings_dict(df):
 
 Career = get_ratings_dict(Active_History)
 
+Career['test-driver'] = list(range(1425, 1500, 10))
+
+max_len = max(len(lst) for lst in Career.values())
+
+
+padded_data = {key: lst + [np.nan] * (max_len - len(lst)) for key, lst in Career.items()}
+
+
+Career_df = pd.DataFrame.from_dict(padded_data, orient='index')
+
+Career_df.reset_index(inplace=True)
+Career_df.rename(columns={'index': 'name'}, inplace=True)
+
 def career_average(careers, career_length):
     temp = []
     for driver in careers:
@@ -27,6 +42,16 @@ def career_average(careers, career_length):
     temp = pd.DataFrame(temp)
     average_career = temp.mean()
     return average_career
+
+window = 1
+def rolling_high(history, window): #Function to calculate career high rolling average over variable window
+    rolling = history.rolling(window, axis=1).mean(skipna=True).iloc[:, window:]
+    
+    Career_High_Average = history['name'].copy()
+    Career_High_Average = pd.concat([Career_High_Average, rolling.max(axis=1)], axis=1)
+    return Career_High_Average
+
+Career_High_Average = rolling_high(Career_df, window)
 
 def find_similar_drivers(target_driver, career_ratings_dict, length_coeff, metric='pearson'):
     """
@@ -146,7 +171,7 @@ def project_future_ratings(target_driver, career_ratings_dict, x, similar_driver
     
     # Calculate the average change per race for each of the x future races
     if projected_changes:
-        avg_changes = np.sum(np.array(projected_changes), axis=0)
+        avg_changes = np.mean(np.array(projected_changes), axis=0)
     else:
         return "Not enough data to project future ratings."
     
@@ -159,6 +184,37 @@ def project_future_ratings(target_driver, career_ratings_dict, x, similar_driver
         projected_ratings.append(last_rating)
     
     return projected_ratings[-x:]
+
+def nn_project_future_ratings(target_driver, career_ratings_dict, num, model, window_size=10):
+    """
+    Projects the future career of the target driver based on lstm neural network.
+    
+    Parameters:
+    - target_driver (str): The ID of the driver whose future career is to be projected.
+    - career_ratings_dict (dict): Dictionary where keys are driver IDs and values are lists of career ratings.
+    - num (int): Number of races to project into the future.
+    
+    Returns:
+    - List of projected ratings for the target driver over the next x races.
+    """
+    changes = []
+    ratings = career_ratings_dict[target_driver]
+    diff_ratings = np.diff(ratings)
+    input_seq = diff_ratings[-window_size:]  # Start with the last known sequence
+    input_seq = np.array(input_seq)
+    
+    for _ in range(num):
+        input_seq_reshaped = input_seq.reshape((1, window_size, 1))
+        next_rating = model.predict(input_seq_reshaped)
+        changes.append(next_rating[0][0])
+        input_seq = np.append(input_seq[1:], next_rating)
+    
+    predictions = [ratings[-1]]
+    for i in range(len(changes)):
+        predictions.append(predictions[i] + changes[i])
+    
+    predictions = predictions[1:]
+    return predictions
 
 def smooth_spline(ratings, smoothing_factor=0.5):
     x = np.arange(len(ratings))
@@ -215,7 +271,7 @@ def plot_career_races(careers, drivers):
     ax1.legend(drivers)
     plt.show()
     
-def plot_career_projection(target_driver, career_ratings_dict, projected_ratings):
+def plot_career_projection(target_driver, career_ratings_dict, sim_projection, nn_projection, full_projection):
     """
     Plots the target driver's career ratings so far and the future projection.
     
@@ -231,7 +287,7 @@ def plot_career_projection(target_driver, career_ratings_dict, projected_ratings
         print("Target driver not found in the dictionary.")
         return
     
-    projected_ratings = list(projected_ratings)
+    projected_ratings = list(sim_projection)
     
     current_ratings = career_ratings_dict[target_driver]
     current_race_count = len(current_ratings)
@@ -247,8 +303,14 @@ def plot_career_projection(target_driver, career_ratings_dict, projected_ratings
     # Plot the current career ratings
     plt.plot(current_race_indices, current_ratings, label='Career So Far', color='blue', linestyle='-')
 
-    # Plot the projected ratings as a red dashed line
+    # Plot the projected ratings
     plt.plot(projected_race_indices, [current_ratings[-1]] + projected_ratings, 
+             label='Future Projection Sim', color='purple', linestyle='--')
+    
+    plt.plot(projected_race_indices, [current_ratings[-1]] + nn_projection, 
+             label='Future Projection NN', color='orange', linestyle='--')
+    
+    plt.plot(projected_race_indices, [current_ratings[-1]] + full_projection, 
              label='Future Projection', color='red', linestyle='--')
     plt.ylim([1300, 1800])
     plt.xlabel('Race Number')
@@ -266,12 +328,16 @@ proj_num = 50
 similarity_score = find_similar_drivers(target_driver, Career, proj_num, metric='pearson')
 
 projection = project_future_ratings(target_driver, Career, proj_num, similarity_score)
-smooth_projection = smooth_moving_average(projection, window_size=5)
+nn_projection = nn_project_future_ratings(target_driver, Career, proj_num, nn_model, window_size=5)
+blend_projection = (np.array(projection) + np.array(nn_projection))/2
+blend_projection = blend_projection.tolist()
+smooth_projection = smooth_moving_average(projection, window_size=20)
+smooth_nn_projection = smooth_moving_average(nn_projection, window_size=20)
 
 Drivers = get_driver_list(target_driver, similarity_score)
 plot_career_races(Career, Drivers)
 
-plot_career_projection(target_driver, Career, smooth_projection)
+plot_career_projection(target_driver, Career, projection, nn_projection, blend_projection)
 
 # =============================================================================
 # average_career = career_average(Career, 50)

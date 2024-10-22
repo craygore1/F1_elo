@@ -36,16 +36,6 @@ def get_active_history(history): # Function to get active history
 Active_History = get_active_history(Blended_History)
 Active_Quali = get_active_history(Quali_History)
 
-window = 200
-def rolling_high(history, window): #Function to calculate career high rolling average over variable window
-    Rolling = history.select_dtypes('number').rolling(window, axis=1).mean(skipna=True).iloc[:, window:]
-    
-    Career_High_Average = Blended_History[['id','name']].copy()
-    Career_High_Average = pd.concat([Career_High_Average, Rolling.max(axis=1)], axis=1)
-    return Career_High_Average
-
-Career_High_Average = rolling_high(Active_History, window)
-
 def get_year_round(race_numbers):
     race_mask = All_Races['raceId'].isin(race_numbers)  # Mask to filter matching race IDs
     filtered_races = All_Races.loc[race_mask, ['raceId', 'year', 'round']].drop_duplicates('raceId')
@@ -165,7 +155,7 @@ def plot_career(df, history, drivers, title):
     plt.show()
 
 
-Drivers = ["fernando-alonso", "lewis-hamilton", "max-verstappen"]
+Drivers = ["michael-schumacher", "mika-hakkinen", "damon-hill"]
 plot_career(All_Races, Active_History, Drivers, 'Driver History')
 
 Active_History.to_csv('activehistory.csv', index=False)
