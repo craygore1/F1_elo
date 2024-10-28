@@ -66,7 +66,7 @@ def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df,
                    base_value):
     # Adjust k values based on the race type (Indy 500 or others)
     k = 8 if is_indy else 32
-    k_team = 8 if is_indy else 24
+    k_team = 8 if is_indy else 26
     
     elo_custom = MultiElo(k_value=k, score_function_base=base_value)
     elo_team = MultiElo(k_value=k_team, score_function_base=base_value)
@@ -88,8 +88,8 @@ def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df,
     quali_team_df['rating'] = team_quali['rating']
     
     # Calculate blended ratings
-    blended_df['rating'] = 0.25 * current_df['rating'] + 0.75 * current_team_df['rating']
-    quali_blended_df['rating'] = 0.25 * quali_df['rating'] + 0.75 * quali_team_df['rating'] 
+    blended_df['rating'] = 0.2 * current_df['rating'] + 0.8 * current_team_df['rating']
+    quali_blended_df['rating'] = 0.2 * quali_df['rating'] + 0.8 * quali_team_df['rating'] 
     full_blend_df['rating'] = 0.2 * quali_blended_df['rating'] + 0.8 * blended_df['rating']
     
     # Return the updated ratings in dictionary format

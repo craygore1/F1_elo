@@ -269,6 +269,7 @@ def plot_career_races(careers, drivers):
     apply_plot_style(ax1, 2)
     
     ax1.legend(drivers)
+    fig.set_figwidth(16)
     plt.show()
     
 def plot_career_projection(target_driver, career_ratings_dict, sim_projection, nn_projection, full_projection):
@@ -322,7 +323,7 @@ def plot_career_projection(target_driver, career_ratings_dict, sim_projection, n
     plt.show()
 
 
-target_driver = 'ayrton-senna'
+target_driver = 'lando-norris'
 proj_num = 50
                
 similarity_score = find_similar_drivers(target_driver, Career, proj_num, metric='pearson')
@@ -340,20 +341,8 @@ plot_career_races(Career, Drivers)
 plot_career_projection(target_driver, Career, projection, nn_projection, blend_projection)
 
 # =============================================================================
-# average_career = career_average(Career, 50)
+# Career['charles-leclerc-proj'] = Career['charles-leclerc'] + blend_projection
 # 
-# fig, ax1 = plt.subplots()
-# 
-# ax1.plot(average_career)
-# plt.title('Average Career', fontsize=16, fontweight='bold')
-# 
-# ax1.set_ylim([1400, 1700])
-# ax1.grid(True, linestyle='--', alpha=0.6)
-# 
-# plt.tight_layout()    
-# apply_plot_style(ax1, 2)
-# 
-# plt.show()
+# sim_test = find_similar_drivers('charles-leclerc-proj', Career, proj_num, metric='pearson')
 # =============================================================================
-        
     
