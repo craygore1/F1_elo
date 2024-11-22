@@ -20,8 +20,6 @@ def get_ratings_dict(df):
 
 Career = get_ratings_dict(Active_History)
 
-Career['test-driver'] = list(range(1425, 1500, 10))
-
 max_len = max(len(lst) for lst in Career.values())
 
 
@@ -323,7 +321,7 @@ def plot_career_projection(target_driver, career_ratings_dict, sim_projection, n
     plt.show()
 
 
-target_driver = 'alexander-albon'
+target_driver = 'liam-lawson'
 proj_num = 50
                
 similarity_score = find_similar_drivers(target_driver, Career, proj_num, metric='pearson')

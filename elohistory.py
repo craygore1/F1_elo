@@ -4,16 +4,13 @@ import numpy as np
 import pandas as pd
 import racemodule
 from multielo import MultiElo, Player, Tracker
-import time
-
-start_time = time.time()
 
 All_Races = pd.read_csv('f1db-races-race-results.csv')
 All_Quali = pd.read_csv('f1db-races-qualifying-results.csv')
 All_Drivers = pd.read_csv('f1db-drivers.csv')
 
 # Function to create initial dataframes and set ratings
-def create_driver_data(all_drivers, default_rating=1425, old_driver_rating=1500):
+def create_driver_data(all_drivers, default_rating=1400, old_driver_rating=1500):
     df = pd.DataFrame(data=all_drivers, columns=['id', 'name', 'dateOfBirth'])
     df['dateOfBirth'] = pd.to_datetime(df['dateOfBirth'])
     df['rating'] = np.where(df['dateOfBirth'].dt.year < 1920, old_driver_rating, default_rating)
@@ -151,6 +148,3 @@ Blended_History_Quali.to_csv('qualihistory.csv', index=False)
 Rating_History.to_csv('history.csv', index=False)
 Rating_History_Team.to_csv('teamhistory.csv', index=False)
 
-end_time = time.time()
-elapsed_time = end_time - start_time
-print(elapsed_time)
