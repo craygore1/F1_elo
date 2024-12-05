@@ -155,7 +155,7 @@ def plot_career(df, history, drivers, title):
     plt.show()
 
 
-Drivers = ["marcus-ericsson", "lando-norris", 'george-russell']
+Drivers = ["sergio-perez", "lando-norris", 'george-russell']
 plot_career(All_Races, Active_History, Drivers, 'Driver History')
 
 Active_History.to_csv('activehistory.csv', index=False)

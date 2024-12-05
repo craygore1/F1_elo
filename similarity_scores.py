@@ -321,7 +321,7 @@ def plot_career_projection(target_driver, career_ratings_dict, sim_projection, n
     plt.show()
 
 
-target_driver = 'liam-lawson'
+target_driver = 'max-verstappen'
 proj_num = 50
                
 similarity_score = find_similar_drivers(target_driver, Career, proj_num, metric='pearson')
