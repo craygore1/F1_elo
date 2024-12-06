@@ -10,7 +10,7 @@ All_Quali = pd.read_csv('f1db-races-qualifying-results.csv')
 All_Drivers = pd.read_csv('f1db-drivers.csv')
 
 # Function to create initial dataframes and set ratings
-def create_driver_data(all_drivers, default_rating=1400, old_driver_rating=1500):
+def create_driver_data(all_drivers, default_rating=1425, old_driver_rating=1525):
     df = pd.DataFrame(data=all_drivers, columns=['id', 'name', 'dateOfBirth'])
     df['dateOfBirth'] = pd.to_datetime(df['dateOfBirth'])
     df['rating'] = np.where(df['dateOfBirth'].dt.year < 1920, old_driver_rating, default_rating)
@@ -46,10 +46,10 @@ def create_blended_data(all_drivers, rating1, rating2, weight1=0.25, weight2=0.7
 
 Blended_Rating, Blended_History = create_blended_data(All_Drivers, Current_Rating['rating'], Current_Rating_Team['rating'])
 Blended_Quali, Blended_History_Quali = create_blended_data(All_Drivers, Current_Quali['rating'], Current_Quali_Team['rating'])
-Full_Blend, Full_Blend_History = create_blended_data(All_Drivers, Blended_Quali['rating'], Blended_Rating['rating'], weight1=0.2, weight2=0.8)
+Full_Blend, Full_Blend_History = create_blended_data(All_Drivers, Blended_Quali['rating'], Blended_Rating['rating'], weight1=0.3, weight2=0.7)
 
-k = 32
-k_team = 26
+k = 24
+k_team = 16
 base = 1
 
 elo_custom = MultiElo(k_value=k, score_function_base=base)
@@ -62,8 +62,8 @@ def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df,
                    quali_team_df, blended_df, quali_blended_df, full_blend_df, 
                    base_value):
     # Adjust k values based on the race type (Indy 500 or others)
-    k = 8 if is_indy else 32
-    k_team = 8 if is_indy else 26
+    k = 8 if is_indy else 24
+    k_team = 8 if is_indy else 16
     
     elo_custom = MultiElo(k_value=k, score_function_base=base_value)
     elo_team = MultiElo(k_value=k_team, score_function_base=base_value)
@@ -85,9 +85,9 @@ def update_ratings(race_id, is_indy, current_df, current_team_df, quali_df,
     quali_team_df['rating'] = team_quali['rating']
     
     # Calculate blended ratings
-    blended_df['rating'] = 0.2 * current_df['rating'] + 0.8 * current_team_df['rating']
-    quali_blended_df['rating'] = 0.2 * quali_df['rating'] + 0.8 * quali_team_df['rating'] 
-    full_blend_df['rating'] = 0.2 * quali_blended_df['rating'] + 0.8 * blended_df['rating']
+    blended_df['rating'] = 0.25 * current_df['rating'] + 0.75 * current_team_df['rating']
+    quali_blended_df['rating'] = 0.28 * quali_df['rating'] + 0.72 * quali_team_df['rating'] 
+    full_blend_df['rating'] = 0.15 * quali_blended_df['rating'] + 0.85 * blended_df['rating']
     
     # Return the updated ratings in dictionary format
     return (current_df['rating'].copy(), team_ratings['rating'].copy(), 
@@ -121,6 +121,8 @@ for i in range(1, max(All_Races['raceId']) + 1):
         full_blend_df=Full_Blend,
         base_value=base
     )
+    if i % 50 == 0:
+        print(f"Processed {i} iterations so far.")
     
 # Function to create Career High and Career History
 def history_and_high(df, update_dict, index):

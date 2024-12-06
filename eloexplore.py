@@ -154,9 +154,31 @@ def plot_career(df, history, drivers, title):
     ax1.legend(drivers)
     plt.show()
 
+def find_largest_changes(df):
+
+    rating_data = df.iloc[:, 2:].copy()
+    
+    # Calculate absolute differences between successive columns
+    diff_data = np.abs(rating_data.diff(axis=1))
+    
+    flat_data = []
+    for row_idx, row in diff_data.iterrows():
+        for col_idx, value in enumerate(row):
+            if not np.isnan(value):  # Ignore NaN differences
+                flat_data.append((value, df.iloc[row_idx, 0], df.iloc[row_idx, 1], col_idx + 5))  # Include id, name, and column index
+    
+    flat_data = sorted(flat_data, key=lambda x: x[0], reverse=True)
+    
+    # Create a dataframe from the results
+    result_df = pd.DataFrame(flat_data, columns=["max_change", "id", "name", "column_number"])
+    
+    return result_df
+
 
 Drivers = ["sergio-perez", "lando-norris", 'george-russell']
 plot_career(All_Races, Active_History, Drivers, 'Driver History')
+
+big_diff = find_largest_changes(Active_History)
 
 Active_History.to_csv('activehistory.csv', index=False)
 
