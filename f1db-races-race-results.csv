@@ -505,7 +505,7 @@
 21,1952,6,27,,"DNF","129","josef-peters","veritas","veritas","dunlop",false,1,,,,,,,,,,"Engine",,20,"20",20,"20",,,false,,false
 21,1952,6,28,,"DNF","109","maurice-trintignant","gordini","gordini","englebert",false,1,,,,,,,,,,"Accident",,3,"3",3,"3",,,false,,false
 21,1952,6,29,,"DNF","115","gino-bianco","maserati","maserati","pirelli",false,0,,,,,,,,,,"Engine",,16,"16",16,"16",,,false,,false
-21,1952,6,30,,"DSQ","105","felice-bonetto","maserati","maserati","pirelli",false,1,,,,,,,,,,,,10,"10",10,"10",,,false,,false
+21,1952,6,30,,"DSQ","105","felice-bonetto","maserati","maserati","pirelli",false,1,,,,,,,,,,"Push start",,10,"10",10,"10",,,false,,false
 21,1952,6,31,,"DNS","133","willi-krakau","afm","bmw","dunlop",false,,,,,,,,,,,,,,,,,,,false,,false
 21,1952,6,32,,"DNS","131","ludwig-fischer","afm","bmw","dunlop",false,,,,,,,,,,,,,,,,,,,false,,false
 21,1952,6,33,,"DNS","134","harry-merkel","krakau","bmw","dunlop",false,,,,,,,,,,,,,,,,,,,false,,false
@@ -1389,7 +1389,7 @@
 55,1956,7,18,,"DNF","16","roy-salvadori","maserati","maserati","dunlop",false,2,,,,,,,,,,"Suspension",,9,"9",9,"9",,,false,,false
 55,1956,7,19,,"DNF","10","robert-manzon","gordini","gordini","englebert",false,0,,,,,,,,,,"Suspension",,15,"15",15,"15",,,false,,false
 55,1956,7,20,,"DNF","14","giorgio-scarlatti","ferrari","ferrari","pirelli",false,0,,,,,,,,,,"Engine",,17,"17",17,"17",,,false,,false
-55,1956,7,21,,"DSQ","21","bruce-halford","maserati","maserati","dunlop",false,20,,,,,"+2 laps",,2,,,,,11,"11",11,"11",,,false,,false
+55,1956,7,21,,"DSQ","21","bruce-halford","maserati","maserati","dunlop",false,20,,,,,"+2 laps",,2,,,"Push start",,11,"11",11,"11",,,false,,false
 55,1956,7,22,,"DNS","8","cesare-perdisa","maserati","maserati","pirelli",false,,,,,,,,,,,"Accident in practice",,6,"6",6,"6",,,false,,false
 55,1956,7,23,,"DNS","11","andre-pilette","gordini","gordini","englebert",false,,,,,,,,,,,"Accident in practice",,18,"18",18,"18",,,false,,false
 55,1956,7,24,,"DNS","18","luigi-piotti","maserati","maserati","pirelli",false,,,,,,,,,,,"Car raced by Villoresi",,19,"19",,,,,false,,false
@@ -10518,7 +10518,7 @@
 420,1985,16,22,,"DNF","7","nelson-piquet","brabham","bmw","pirelli",false,14,,,,,,,,,,"Fire",,9,"9",9,"9",,,false,,false
 420,1985,16,23,,"DNF","23","eddie-cheever","alfa-romeo","alfa-romeo","goodyear",false,5,,,,,,,,,,"Engine",,13,"13",13,"13",,,false,,false
 420,1985,16,24,,"DNF","5","nigel-mansell","williams","honda","goodyear",false,1,,,,,,,,,,"Transmission",,2,"2",2,"2",,,false,,false
-420,1985,16,25,,"DSQ","11","elio-de-angelis","lotus","renault","goodyear",false,18,,,,,,,,,,"Illegal grid position",,10,"10",10,"10",,,false,,false
+420,1985,16,25,,"DSQ","11","elio-de-angelis","lotus","renault","goodyear",false,18,,,,,,,,,,"Illegal start",,10,"10",10,"10",,,false,,false
 421,1986,1,1,1,"1","6","nelson-piquet","williams","honda","goodyear",false,61,"1:39:32.583",5972583,,,,,,,,,9,2,"2",2,"2",1,,true,,false
 421,1986,1,2,2,"2","12","ayrton-senna","lotus","renault","goodyear",false,61,"1:40:07.410",6007410,,,"+34.827",34827,,"+34.827",34827,,6,1,"1",1,"1",-1,,false,,false
 421,1986,1,3,3,"3","26","jacques-laffite","ligier","renault","pirelli",false,61,"1:40:32.342",6032342,,,"+59.759",59759,,"+24.932",24932,,4,5,"5",5,"5",2,,false,,false
@@ -15906,9 +15906,9 @@
 609,1997,12,12,12,"12","23","jan-magnussen","stewart","ford","bridgestone",false,43,,,,,"+1 lap",,1,,,,,18,"18",18,"18",6,2,false,,false
 609,1997,12,13,13,"13","1","damon-hill","arrows","yamaha","bridgestone",false,42,,,,,,,,,,"Wheel nut",,9,"9",9,"9",-4,3,false,,false
 609,1997,12,14,14,"14","20","ukyo-katayama","minardi","hart","bridgestone",false,42,,,,,,,,,,"Engine",,20,"20",20,"20",6,2,false,,false
-609,1997,12,15,15,"15","14","jarno-trulli","prost","mugen-honda","bridgestone",false,42,,,,,"+2 laps",,2,,,,,14,"14",14,"14",-1,2,false,,false
+609,1997,12,15,15,"15","14","jarno-trulli","prost","mugen-honda","bridgestone",false,42,,,,,"+2 laps",,2,,,,,14,"14",,"PL",-1,2,false,,false
 609,1997,12,16,,"DNF","18","jos-verstappen","tyrrell","ford","goodyear",false,25,,,,,,,,,,"Spun off",,21,"21",21,"21",,1,false,,false
-609,1997,12,17,,"DNF","11","ralf-schumacher","jordan","peugeot","goodyear",false,21,,,,,,,,,,"Spun off",,6,"6",6,"6",,1,false,,false
+609,1997,12,17,,"DNF","11","ralf-schumacher","jordan","peugeot","goodyear",false,21,,,,,,,,,,"Spun off",,6,"6",,"PL",,1,false,,false
 609,1997,12,18,,"DNF","10","david-coulthard","mclaren","mercedes","goodyear",false,19,,,,,,,,,,"Spun off",,10,"10",10,"10",,1,false,,false
 609,1997,12,19,,"DNF","21","tarso-marques","minardi","hart","bridgestone",false,18,,,,,,,,,,"Spun off",,22,"22",22,"22",,1,false,,false
 609,1997,12,20,,"DNF","22","rubens-barrichello","stewart","ford","bridgestone",false,8,,,,,,,,,,"Steering",,12,"12",12,"12",,0,false,,false
@@ -17142,7 +17142,7 @@
 665,2001,2,16,,"DNF","10","jacques-villeneuve","bar","honda","bridgestone",false,3,,,,,,,,,,"Spun off",,7,"7",7,"7",,0,false,,false
 665,2001,2,17,,"DNF","16","nick-heidfeld","sauber","petronas","bridgestone",false,3,,,,,,,,,,"Spun off",,11,"11",11,"11",,0,false,,false
 665,2001,2,18,,"DNF","15","enrique-bernoldi","arrows","asiatech","bridgestone",false,3,,,,,,,,,,"Spun off",,22,"22",22,"22",,0,false,,false
-665,2001,2,19,,"DNF","6","juan-pablo-montoya","williams","bmw","michelin",false,3,,,,,,,,,,"Spun off",,6,"6",6,"6",,0,false,,false
+665,2001,2,19,,"DNF","6","juan-pablo-montoya","williams","bmw","michelin",false,3,,,,,,,,,,"Spun off",,6,"6",,"PL",,0,false,,false
 665,2001,2,20,,"DNF","18","eddie-irvine","jaguar","cosworth","michelin",false,3,,,,,,,,,,"Water leak",,12,"12",12,"12",,0,false,,false
 665,2001,2,21,,"DNF","9","olivier-panis","bar","honda","bridgestone",false,1,,,,,,,,,,"Engine",,10,"10",10,"10",,0,false,,false
 665,2001,2,22,,"DNF","17","kimi-raikkonen","sauber","petronas","bridgestone",false,0,,,,,,,,,,"Driveshaft",,14,"14",14,"14",,0,false,,false
@@ -17419,8 +17419,8 @@
 678,2001,15,7,7,"7","17","kimi-raikkonen","sauber","petronas","bridgestone",false,53,"1:18:21.600",4701600,,,"+1:23.107",83107,,"+0.638",638,,,9,"9",9,"9",2,1,false,,false
 678,2001,15,8,8,"8","12","jean-alesi","jordan","honda","bridgestone",false,52,,,,,"+1 lap",,1,,,,,16,"16",16,"16",8,2,false,,false
 678,2001,15,9,9,"9","9","olivier-panis","bar","honda","bridgestone",false,52,,,,,"+1 lap",,1,,,,,17,"17",17,"17",8,1,false,,false
-678,2001,15,10,10,"10","7","giancarlo-fisichella","benetton","renault","michelin",false,52,,,,,"+1 lap",,1,,,,,14,"14",14,"14",4,1,false,,false
-678,2001,15,11,11,"11","16","nick-heidfeld","sauber","petronas","bridgestone",false,52,,,,,"+1 lap",,1,,,,,8,"8",8,"8",-3,1,false,,false
+678,2001,15,10,10,"10","7","giancarlo-fisichella","benetton","renault","michelin",false,52,,,,,"+1 lap",,1,,,,,14,"14",,"PL",4,1,false,,false
+678,2001,15,11,11,"11","16","nick-heidfeld","sauber","petronas","bridgestone",false,52,,,,,"+1 lap",,1,,,,,8,"8",,"PL",-3,1,false,,false
 678,2001,15,12,12,"12","23","tomas-enge","prost","acer","michelin",false,52,,,,,"+1 lap",,1,,,,,20,"20",20,"20",8,1,false,,false
 678,2001,15,13,13,"13","21","fernando-alonso","minardi","european","michelin",false,51,,,,,"+2 laps",,2,,,,,21,"21",21,"21",8,2,false,,false
 678,2001,15,14,,"DNF","15","enrique-bernoldi","arrows","asiatech","bridgestone",false,46,,,,,,,,,,"Crankshaft",,18,"18",18,"18",,1,false,,false
@@ -17685,7 +17685,7 @@
 690,2002,10,9,9,"9","8","felipe-massa","sauber","petronas","bridgestone",false,59,,,,,"+1 lap",,1,,,,,11,"11",11,"11",2,3,false,,false
 690,2002,10,10,10,"10","3","david-coulthard","mclaren","mercedes","michelin",false,58,,,,,"+2 laps",,2,,,,,6,"6",6,"6",-4,4,false,,false
 690,2002,10,11,11,"11","17","pedro-de-la-rosa","jaguar","cosworth","michelin",false,58,,,,,"+2 laps",,2,,,,,21,"21",21,"21",10,3,false,,false
-690,2002,10,12,12,"12","15","jenson-button","renault","renault","michelin",false,54,,,,,,,,,,"Wheel",,12,"12",12,"12",0,4,false,,false
+690,2002,10,12,12,"12","15","jenson-button","renault","renault","michelin",false,54,,,,,,,,,,"Suspension",,12,"12",12,"12",0,4,false,,false
 690,2002,10,13,,"DNF","10","takuma-sato","jordan","honda","bridgestone",false,50,,,,,,,,,,"Engine",,14,"14",14,"14",,2,false,,false
 690,2002,10,14,,"DNF","4","kimi-raikkonen","mclaren","mercedes","michelin",false,44,,,,,,,,,,"Engine",,5,"5",5,"5",,4,false,,false
 690,2002,10,15,,"DNF","14","jarno-trulli","renault","renault","michelin",false,29,,,,,,,,,,"Electrical",,7,"7",7,"7",,3,false,,false
@@ -18646,7 +18646,7 @@
 738,2005,7,8,8,"8","16","jarno-trulli","toyota","toyota","michelin",false,59,"1:32:57.739",5577739,,,"+1:11.091",71091,,"+12.918",12918,,1,4,"4",4,"4",-4,3,false,,false
 738,2005,7,9,9,"9","15","vitantonio-liuzzi","red-bull","cosworth","michelin",false,59,"1:32:58.177",5578177,,,"+1:11.529",71529,,"+0.438",438,,,14,"14",14,"14",5,2,false,,false
 738,2005,7,10,10,"10","3","jenson-button","bar","honda","michelin",false,59,"1:33:22.434",5602434,,,"+1:35.786",95786,,"+24.257",24257,,,13,"13",13,"13",3,2,false,,false
-738,2005,7,11,11,"11","9","kimi-raikkonen","mclaren","mercedes","michelin",false,58,,,,,"+1 lap",,1,,,"Wheel",,2,"2",2,"2",-9,2,false,,false
+738,2005,7,11,11,"11","9","kimi-raikkonen","mclaren","mercedes","michelin",false,58,,,,,"+1 lap",,1,,,"Puncture",,2,"2",2,"2",-9,2,false,,false
 738,2005,7,12,12,"12","4","takuma-sato","bar","honda","michelin",false,58,,,,,"+1 lap",,1,,,,,16,"16",16,"16",4,3,false,,false
 738,2005,7,13,13,"13","11","jacques-villeneuve","sauber","petronas","michelin",false,58,,,,,"+1 lap",,1,,,,,15,"15",15,"15",2,2,false,,false
 738,2005,7,14,14,"14","12","felipe-massa","sauber","petronas","michelin",false,58,,,,,"+1 lap",,1,,,,,11,"11",11,"11",-3,3,false,,false
@@ -20231,7 +20231,7 @@
 813,2009,10,15,15,"15","11","jaime-alguersuari","toro-rosso","ferrari","bridgestone",false,69,,,,,"+1 lap",,1,,,,,20,"20",19,"19",4,2,false,,false
 813,2009,10,16,16,"16","12","sebastien-buemi","toro-rosso","ferrari","bridgestone",false,69,,,,,"+1 lap",,1,,,,,11,"11",10,"10",-6,2,false,,false
 813,2009,10,17,,"DNF","15","sebastian-vettel","red-bull","renault","bridgestone",false,29,,,,,,,,,,"Suspension",,2,"2",2,"2",,2,false,,false
-813,2009,10,18,,"DNF","7","fernando-alonso","renault","renault","bridgestone",false,15,,,,,,,,,,"Fuel pump",,1,"1",1,"1",,2,false,,false
+813,2009,10,18,,"DNF","7","fernando-alonso","renault","renault","bridgestone",false,15,,,,,,,,,,"Wheel",,1,"1",1,"1",,2,false,,false
 813,2009,10,19,,"DNF","20","adrian-sutil","force-india","mercedes","bridgestone",false,1,,,,,,,,,,"Water pressure",,18,"18",17,"17",,0,false,,false
 813,2009,10,20,,"DNS","3","felipe-massa","ferrari","ferrari","bridgestone",false,,,,,,,,,,,"Accident in qualifying",,10,"10",,,,0,false,,false
 814,2009,11,1,1,"1","23","rubens-barrichello","brawn","mercedes","bridgestone",false,57,"1:35:51.289",5751289,,,,,,,,,10,3,"3",3,"3",2,2,false,,false
@@ -20442,7 +20442,7 @@
 823,2010,3,18,,"NC","19","heikki-kovalainen","lotus-racing","cosworth","bridgestone",false,46,,,,,"+10 laps",,10,,,,,15,"15",15,"15",,2,false,,false
 823,2010,3,19,,"DNF","12","vitaly-petrov","renault","renault","bridgestone",false,32,,,,,,,,,,"Gearbox",,11,"11",11,"11",,1,false,,false
 823,2010,3,20,,"DNF","15","vitantonio-liuzzi","force-india","mercedes","bridgestone",false,12,,,,,,,,,,"Throttle",,10,"10",10,"10",,0,false,,false
-823,2010,3,21,,"DNF","3","michael-schumacher","mercedes","mercedes","bridgestone",false,9,,,,,,,,,,"Wheel",,8,"8",8,"8",,0,false,,false
+823,2010,3,21,,"DNF","3","michael-schumacher","mercedes","mercedes","bridgestone",false,9,,,,,,,,,,"Wheel nut",,8,"8",8,"8",,0,false,,false
 823,2010,3,22,,"DNF","23","kamui-kobayashi","sauber","ferrari","bridgestone",false,8,,,,,,,,,,"Engine",,9,"9",9,"9",,0,false,,false
 823,2010,3,23,,"DNF","24","timo-glock","virgin","cosworth","bridgestone",false,2,,,,,,,,,,"Collision",,16,"16",16,"16",,0,false,,false
 823,2010,3,24,,"DNS","22","pedro-de-la-rosa","sauber","ferrari","bridgestone",false,,,,,,,,,,,,,12,"12",12,"12",,0,false,,false
@@ -21402,8 +21402,8 @@
 863,2012,5,20,,"DNF","15","sergio-perez","sauber","ferrari","pirelli",false,37,,,,,,,,,,"Transmission",,5,"5",5,"5",,3,false,,false
 863,2012,5,21,,"DNF","25","charles-pic","marussia","cosworth","pirelli",false,35,,,,,,,,,,"Halfshaft",,20,"20",20,"20",,2,false,,false
 863,2012,5,22,,"DNF","23","narain-karthikeyan","hrt","cosworth","pirelli",false,22,,,,,,,,,,"Wheel",,,"NC",23,"23",,2,false,,false
-863,2012,5,23,,"DNF","19","bruno-senna","williams","renault","pirelli",false,12,,,,,,,,,,"Accident damage",,17,"17",17,"17",,0,false,,false
-863,2012,5,24,,"DNF","7","michael-schumacher","mercedes","mercedes","pirelli",false,12,,,,,,,,,,"Accident",,8,"8",8,"8",,1,false,,false
+863,2012,5,23,,"DNF","19","bruno-senna","williams","renault","pirelli",false,12,,,,,,,,,,"Collision damage",,17,"17",17,"17",,0,false,,false
+863,2012,5,24,,"DNF","7","michael-schumacher","mercedes","mercedes","pirelli",false,12,,,,,,,,,,"Collision",,8,"8",8,"8",,1,false,,false
 864,2012,6,1,1,"1","2","mark-webber","red-bull","renault","pirelli",false,78,"1:46:06.557",6366557,,,,,,,,,25,2,"2",1,"1",0,1,false,,false
 864,2012,6,2,2,"2","8","nico-rosberg","mercedes","mercedes","pirelli",false,78,"1:46:07.200",6367200,,,"+0.643",643,,"+0.643",643,,18,3,"3",2,"2",0,1,false,,false
 864,2012,6,3,3,"3","5","fernando-alonso","ferrari","ferrari","pirelli",false,78,"1:46:07.504",6367504,,,"+0.947",947,,"+0.304",304,,15,6,"6",5,"5",2,1,false,,false
@@ -23529,8 +23529,8 @@
 961,2017,5,16,16,"16","18","lance-stroll","williams","mercedes","pirelli",false,64,,,,,"+2 laps",,2,,,,,18,"18",18,"18",2,2,false,false,false
 961,2017,5,17,,"DNF","77","valtteri-bottas","mercedes","mercedes","pirelli",false,38,,,,,,,,,,"Engine",,3,"3",3,"3",,1,false,false,false
 961,2017,5,18,,"DNF","2","stoffel-vandoorne","mclaren","honda","pirelli",false,32,,,,,,,,,,"Accident",,19,"19",20,"20",,1,false,false,false
-961,2017,5,19,,"DNF","33","max-verstappen","red-bull","tag-heuer","pirelli",false,1,,,,,,,,,,"Accident damage",,5,"5",5,"5",,0,false,false,false
-961,2017,5,20,,"DNF","7","kimi-raikkonen","ferrari","ferrari","pirelli",false,0,,,,,,,,,,"Suspension",,4,"4",4,"4",,0,false,false,false
+961,2017,5,19,,"DNF","33","max-verstappen","red-bull","tag-heuer","pirelli",false,1,,,,,,,,,,"Collision damage",,5,"5",5,"5",,0,false,false,false
+961,2017,5,20,,"DNF","7","kimi-raikkonen","ferrari","ferrari","pirelli",false,0,,,,,,,,,,"Collision",,4,"4",4,"4",,0,false,false,false
 962,2017,6,1,1,"1","5","sebastian-vettel","ferrari","ferrari","pirelli",false,78,"1:44:44.340",6284340,,,,,,,,,25,2,"2",2,"2",1,1,false,true,false
 962,2017,6,2,2,"2","7","kimi-raikkonen","ferrari","ferrari","pirelli",false,78,"1:44:47.485",6287485,,,"+3.145",3145,,"+3.145",3145,,18,1,"1",1,"1",-1,1,false,false,false
 962,2017,6,3,3,"3","3","daniel-ricciardo","red-bull","tag-heuer","pirelli",false,78,"1:44:48.085",6288085,,,"+3.745",3745,,"+0.600",600,,15,5,"5",5,"5",2,1,false,false,false
@@ -25888,8 +25888,8 @@
 1079,2022,22,15,15,"15","77","valtteri-bottas","alfa-romeo","ferrari","pirelli",false,57,,,,,"+1 lap",,1,,,,,18,"18",18,"18",3,1,false,false,false
 1079,2022,22,16,16,"16","47","mick-schumacher","haas","ferrari","pirelli",false,57,,,"5.000",5000,"+1 lap",,1,,,,,13,"13",12,"12",-4,2,false,false,false
 1079,2022,22,17,17,"17","20","kevin-magnussen","haas","ferrari","pirelli",false,57,,,,,"+1 lap",,1,,,,,16,"16",16,"16",-1,1,false,false,false
-1079,2022,22,18,18,"18","44","lewis-hamilton","mercedes","mercedes","pirelli",false,55,,,,,,,,,,"Hydraulics",,5,"5",5,"5",-13,1,false,false,false
-1079,2022,22,19,19,"19","6","nicholas-latifi","williams","mercedes","pirelli",false,55,,,,,,,,,,"Electrical",,20,"20",20,"20",1,2,false,false,false
+1079,2022,22,18,18,"18","44","lewis-hamilton","mercedes","mercedes","pirelli",false,55,,,,,,,,,,"Gearbox",,5,"5",5,"5",-13,1,false,false,false
+1079,2022,22,19,19,"19","6","nicholas-latifi","williams","mercedes","pirelli",false,55,,,,,,,,,,"Collision damage",,20,"20",20,"20",1,2,false,false,false
 1079,2022,22,20,,"DNF","14","fernando-alonso","alpine","renault","pirelli",false,27,,,,,,,,,,"Water leak",,11,"11",10,"10",,1,false,false,false
 1080,2023,1,1,1,"1","1","max-verstappen","red-bull","honda-rbpt","pirelli",false,57,"1:33:56.736",5636736,,,,,,,,,25,1,"1",1,"1",0,2,false,false,false
 1080,2023,1,2,2,"2","11","sergio-perez","red-bull","honda-rbpt","pirelli",false,57,"1:34:08.723",5648723,,,"+11.987",11987,,"+11.987",11987,,18,2,"2",2,"2",0,2,false,false,false
@@ -26010,7 +26010,7 @@
 1085,2023,6,17,17,"17","27","nico-hulkenberg","haas","ferrari","pirelli",false,76,,,"10.000",10000,"+2 laps",,2,,,,,18,"18",18,"18",1,3,false,false,false
 1085,2023,6,18,18,"18","2","logan-sargeant","williams","mercedes","pirelli",false,76,,,"5.000",5000,"+2 laps",,2,,,,,16,"16",16,"16",-2,3,false,false,false
 1085,2023,6,19,19,"19","20","kevin-magnussen","haas","ferrari","pirelli",false,70,,,,,,,,,,"Accident damage",,17,"17",17,"17",-2,1,false,false,false
-1085,2023,6,20,,"DNF","18","lance-stroll","aston-martin","mercedes","pirelli",false,53,,,,,,,,,,"Brakes",,14,"14",14,"14",,1,false,false,false
+1085,2023,6,20,,"DNF","18","lance-stroll","aston-martin","mercedes","pirelli",false,53,,,,,,,,,,"Accident damage",,14,"14",14,"14",,1,false,false,false
 1086,2023,7,1,1,"1","1","max-verstappen","red-bull","honda-rbpt","pirelli",false,66,"1:27:57.940",5277940,,,,,,,,,26,1,"1",1,"1",0,2,true,false,true
 1086,2023,7,2,2,"2","44","lewis-hamilton","mercedes","mercedes","pirelli",false,66,"1:28:22.030",5302030,,,"+24.090",24090,,"+24.090",24090,,18,5,"5",4,"4",2,2,false,true,false
 1086,2023,7,3,3,"3","63","george-russell","mercedes","mercedes","pirelli",false,66,"1:28:30.329",5310329,,,"+32.389",32389,,"+8.299",8299,,15,12,"12",12,"12",9,2,false,false,false
@@ -26187,7 +26187,7 @@
 1094,2023,15,14,14,"14","2","logan-sargeant","williams","mercedes","pirelli",false,62,"1:48:04.307",6484307,,,"+1:26.889",86889,,"+0.688",688,,,18,"18",18,"18",4,2,false,false,false
 1094,2023,15,15,15,"15","14","fernando-alonso","aston-martin","mercedes","pirelli",false,62,"1:48:05.021",6485021,,,"+1:27.603",87603,,"+0.714",714,,,7,"7",7,"7",-8,2,false,false,false
 1094,2023,15,16,16,"16","63","george-russell","mercedes","mercedes","pirelli",false,61,,,,,,,,,,"Accident",,2,"2",2,"2",-14,2,false,false,false
-1094,2023,15,17,,"DNF","77","valtteri-bottas","alfa-romeo","ferrari","pirelli",false,51,,,,,,,,,,"Overheating",,16,"16",16,"16",,1,false,false,false
+1094,2023,15,17,,"DNF","77","valtteri-bottas","alfa-romeo","ferrari","pirelli",false,51,,,,,,,,,,"Hydraulics",,16,"16",16,"16",,1,false,false,false
 1094,2023,15,18,,"DNF","31","esteban-ocon","alpine","renault","pirelli",false,42,,,,,,,,,,"Gearbox",,8,"8",8,"8",,1,false,false,false
 1094,2023,15,19,,"DNF","22","yuki-tsunoda","alphatauri","honda-rbpt","pirelli",false,0,,,,,,,,,,"Collision",,15,"15",15,"15",,0,false,false,false
 1094,2023,15,20,,"DNS","18","lance-stroll","aston-martin","mercedes","pirelli",false,,,,,,,,,,,"Accident in qualifying",,20,"20",,,,0,false,false,false
@@ -26785,8 +26785,28 @@
 1124,2024,23,13,13,"13","22","yuki-tsunoda","rb","honda-rbpt","pirelli",false,57,"1:32:06.423",5526423,,,"+1:01.100",61100,,"+4.978",4978,,,14,"14",14,"14",1,4,false,false,false
 1124,2024,23,14,14,"14","30","liam-lawson","rb","honda-rbpt","pirelli",false,57,"1:32:07.979",5527979,,,"+1:02.656",62656,,"+1.556",1556,,,17,"17",17,"17",3,4,false,false,false
 1124,2024,23,15,15,"15","23","alexander-albon","williams","mercedes","pirelli",false,56,,,,,"+1 lap",,1,,,,,16,"16",16,"16",1,4,false,false,false
-1124,2024,23,16,,"DNF","27","nico-hulkenberg","haas","ferrari","pirelli",false,39,,,,,,,,,,"Spin",,18,"18",18,"18",,4,false,false,false
-1124,2024,23,17,,"DNF","11","sergio-perez","red-bull","honda-rbpt","pirelli",false,38,,,,,,,,,,"Spin",,9,"9",9,"9",,3,false,false,false
+1124,2024,23,16,,"DNF","27","nico-hulkenberg","haas","ferrari","pirelli",false,39,,,,,,,,,,"Spun off",,18,"18",18,"18",,4,false,false,false
+1124,2024,23,17,,"DNF","11","sergio-perez","red-bull","honda-rbpt","pirelli",false,38,,,,,,,,,,"Clutch",,9,"9",9,"9",,3,false,false,false
 1124,2024,23,18,,"DNF","18","lance-stroll","aston-martin","mercedes","pirelli",false,8,,,,,,,,,,"Collision damage",,15,"15",15,"15",,2,false,false,false
 1124,2024,23,19,,"DNF","43","franco-colapinto","williams","mercedes","pirelli",false,0,,,,,,,,,,"Collision",,19,"19",19,"19",,0,false,false,false
 1124,2024,23,20,,"DNF","31","esteban-ocon","alpine","renault","pirelli",false,0,,,,,,,,,,"Collision",,20,"20",20,"20",,0,false,false,false
+1125,2024,24,1,1,"1","4","lando-norris","mclaren","mercedes","pirelli",false,58,"1:26:33.291",5193291,,,,,,,,,25,1,"1",1,"1",0,1,false,false,false
+1125,2024,24,2,2,"2","55","carlos-sainz-jr","ferrari","ferrari","pirelli",false,58,"1:26:39.123",5199123,,,"+5.832",5832,,"+5.832",5832,,18,3,"3",3,"3",1,1,false,false,false
+1125,2024,24,3,3,"3","16","charles-leclerc","ferrari","ferrari","pirelli",false,58,"1:27:05.219",5225219,,,"+31.928",31928,,"+26.096",26096,,15,14,"14",19,"19",16,1,false,true,false
+1125,2024,24,4,4,"4","44","lewis-hamilton","mercedes","mercedes","pirelli",false,58,"1:27:09.774",5229774,,,"+36.483",36483,,"+4.555",4555,,12,18,"18",16,"16",12,1,false,false,false
+1125,2024,24,5,5,"5","63","george-russell","mercedes","mercedes","pirelli",false,58,"1:27:10.829",5230829,,,"+37.538",37538,,"+1.055",1055,,10,7,"7",6,"6",1,1,false,false,false
+1125,2024,24,6,6,"6","1","max-verstappen","red-bull","honda-rbpt","pirelli",false,58,"1:27:23.138",5243138,,,"+49.847",49847,,"+12.309",12309,,8,5,"5",4,"4",-2,1,false,false,false
+1125,2024,24,7,7,"7","10","pierre-gasly","alpine","renault","pirelli",false,58,"1:27:45.851",5265851,,,"+1:12.560",72560,,"+22.713",22713,,6,6,"6",5,"5",-2,1,false,false,false
+1125,2024,24,8,8,"8","27","nico-hulkenberg","haas","ferrari","pirelli",false,58,"1:27:48.845",5268845,,,"+1:15.554",75554,,"+2.994",2994,,4,4,"4",7,"7",-1,1,false,false,false
+1125,2024,24,9,9,"9","14","fernando-alonso","aston-martin","mercedes","pirelli",false,58,"1:27:55.664",5275664,,,"+1:22.373",82373,,"+6.819",6819,,2,8,"8",8,"8",-1,2,false,false,false
+1125,2024,24,10,10,"10","81","oscar-piastri","mclaren","mercedes","pirelli",false,58,"1:27:57.112",5277112,,,"+1:23.821",83821,,"+1.448",1448,,1,2,"2",2,"2",-8,2,false,false,false
+1125,2024,24,11,11,"11","23","alexander-albon","williams","mercedes","pirelli",false,57,,,,,"+1 lap",,1,,,,,16,"16",18,"18",7,1,false,false,false
+1125,2024,24,12,12,"12","22","yuki-tsunoda","rb","honda-rbpt","pirelli",false,57,,,,,"+1 lap",,1,,,,,11,"11",11,"11",-1,1,false,false,false
+1125,2024,24,13,13,"13","24","guanyu-zhou","kick-sauber","ferrari","pirelli",false,57,,,,,"+1 lap",,1,,,,,17,"17",15,"15",2,2,false,false,false
+1125,2024,24,14,14,"14","18","lance-stroll","aston-martin","mercedes","pirelli",false,57,,,"5.000",5000,"+1 lap",,1,,,,,13,"13",13,"13",-1,2,false,false,false
+1125,2024,24,15,15,"15","61","jack-doohan","alpine","renault","pirelli",false,57,,,,,"+1 lap",,1,,,,,20,"20",17,"17",2,1,false,false,false
+1125,2024,24,16,16,"16","20","kevin-magnussen","haas","ferrari","pirelli",false,57,,,,,"+1 lap",,1,,,,,15,"15",14,"14",-2,4,true,false,false
+1125,2024,24,17,17,"17","30","liam-lawson","rb","honda-rbpt","pirelli",false,55,,,,,,,,,,"Engine",,12,"12",12,"12",-5,3,false,false,false
+1125,2024,24,18,,"DNF","77","valtteri-bottas","kick-sauber","ferrari","pirelli",false,30,,,,,,,,,,"Collision damage",,9,"9",9,"9",,1,false,false,false
+1125,2024,24,19,,"DNF","43","franco-colapinto","williams","mercedes","pirelli",false,26,,,,,,,,,,"Engine",,19,"19",20,"20",,1,false,false,false
+1125,2024,24,20,,"DNF","11","sergio-perez","red-bull","honda-rbpt","pirelli",false,0,,,,,,,,,,"Collision",,10,"10",10,"10",,0,false,false,false

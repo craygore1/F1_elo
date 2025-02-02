@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Oct  7 14:53:08 2024
-
-@author: woods
-"""
 
 import numpy as np
 import pandas as pd
@@ -36,6 +31,21 @@ def get_active_history(history): # Function to get active history
 Active_History = get_active_history(Blended_History)
 Active_Quali = get_active_history(Quali_History)
 
+def get_recent_rating(history, drivers, n):
+    
+    filtered_history = history[history['id'].isin(drivers)]
+    filtered_ratings = filtered_history.iloc[:, 2:]
+    
+    recent_ratings = filtered_ratings.apply(lambda row: row.dropna().iloc[-n:].tolist() if not row.dropna().empty else [np.nan]*n, axis=1)
+    recent_ratings = pd.DataFrame(recent_ratings.tolist(), columns=[f"rating_{i+1}" for i in range(n)])
+    
+    results = filtered_history.iloc[:, :2].copy()
+    results = results.reset_index(drop=True)
+    results = pd.concat([results, recent_ratings], axis=1)
+    
+    return results
+    
+    
 def get_year_round(race_numbers):
     race_mask = All_Races['raceId'].isin(race_numbers)  # Mask to filter matching race IDs
     filtered_races = All_Races.loc[race_mask, ['raceId', 'year', 'round']].drop_duplicates('raceId')
@@ -125,9 +135,9 @@ def plot_career(df, history, drivers, title):
         
         ax1.plot(ser.index, ser)
         
-        line = plt.gca().get_lines()[0]  # Get the first line object
-        x_values = line.get_xdata()
-        y_values = line.get_ydata()
+        #line = plt.gca().get_lines()[0]  # Get the first line object
+        #x_values = line.get_xdata()
+        #y_values = line.get_ydata()
     
     racenumbers = range(racemin, racemax+1)
     
@@ -170,15 +180,27 @@ def find_largest_changes(df):
     flat_data = sorted(flat_data, key=lambda x: x[0], reverse=True)
     
     # Create a dataframe from the results
-    result_df = pd.DataFrame(flat_data, columns=["max_change", "id", "name", "column_number"])
+    result_df = pd.DataFrame(flat_data, columns=["max_change", "id", "name", "race_number"])
+    
+    cols = result_df.columns.to_list()
+    cols = cols[1:] + [cols[0]]
+    
+    result_df = result_df[cols]
     
     return result_df
 
 
-Drivers = ["sergio-perez", "lando-norris", 'george-russell']
+Drivers = ["max-verstappen", "lando-norris", 'george-russell', 'charles-leclerc']
 plot_career(All_Races, Active_History, Drivers, 'Driver History')
 
 big_diff = find_largest_changes(Active_History)
+
+current_grid = ["max-verstappen", "lando-norris", 'george-russell', 'charles-leclerc',
+                'fernando-alonso', 'lewis-hamilton', 'sergio-perez', 'lance-stroll', 
+                'alexander-albon', 'oscar-piastri', 'esteban-ocon', 'pierre-gasly',
+                'liam-lawson', 'yuki-tsunoda', 'guanyu-zhou', 'valtteri-bottas',
+                'nico-hulkenberg', 'kevin-magnussen', 'carlos-sainz-jr', 'franco-colapinto']
+grid_rating = get_recent_rating(Active_History, current_grid, 5)
 
 Active_History.to_csv('activehistory.csv', index=False)
 
